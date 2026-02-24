@@ -16,24 +16,21 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    // GET http://localhost:8080/orders
-    @GetMapping
-    public List<OrderDto> getAllOrders() {
-        return orderService.getAllOrders();
-    }
-
-    // GET http://localhost:8080/orders/1
+    // GET с @PathVariable
     @GetMapping("/{id}")
     public OrderDto getOrderById(@PathVariable Long id) {
         return orderService.getOrderById(id);
     }
 
-    // GET http://localhost:8080/orders/search?status=CREATED
+    // GET с @RequestParam
     @GetMapping("/search")
-    public List<OrderDto> searchOrders(@RequestParam String status) {
-        return orderService.getAllOrders()
-                .stream()
-                .filter(order -> order.getStatus().equalsIgnoreCase(status))
-                .toList();
+    public List<OrderDto> getOrdersByStatus(@RequestParam String status) {
+        return orderService.getOrdersByStatus(status);
+    }
+
+    // Просто GET всех заказов
+    @GetMapping
+    public List<OrderDto> getAllOrders() {
+        return orderService.getAllOrders();
     }
 }

@@ -2,10 +2,10 @@ package com.delivery.deliverymanagementsystem.model;
 
 public class Order {
 
-    private Long id;
-    private String customerName;
-    private String address;
-    private String status;
+    private final Long id;
+    private final String customerName;
+    private final String address;
+    private final String status;
 
     public Order(Long id, String customerName, String address, String status) {
         this.id = id;

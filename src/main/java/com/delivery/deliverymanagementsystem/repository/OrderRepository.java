@@ -14,6 +14,7 @@ public class OrderRepository {
     public OrderRepository() {
         orders.add(new Order(1L, "Alex", "New York", "CREATED"));
         orders.add(new Order(2L, "John", "Chicago", "SHIPPED"));
+        orders.add(new Order(3L, "Mike", "Boston", "CREATED"));
     }
 
     public List<Order> findAll() {
@@ -25,5 +26,11 @@ public class OrderRepository {
                 .filter(order -> order.getId().equals(id))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public List<Order> findByStatus(String status) {
+        return orders.stream()
+                .filter(order -> order.getStatus().equalsIgnoreCase(status))
+                .toList();
     }
 }

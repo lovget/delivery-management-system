@@ -6,7 +6,6 @@ import com.delivery.deliverymanagementsystem.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -25,18 +24,31 @@ public class OrderService {
                         order.getCustomerName(),
                         order.getStatus()
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public OrderDto getOrderById(Long id) {
         Order order = orderRepository.findById(id);
+
         if (order == null) {
             return null;
         }
+
         return new OrderDto(
                 order.getId(),
                 order.getCustomerName(),
                 order.getStatus()
         );
+    }
+
+    public List<OrderDto> getOrdersByStatus(String status) {
+        return orderRepository.findByStatus(status)
+                .stream()
+                .map(order -> new OrderDto(
+                        order.getId(),
+                        order.getCustomerName(),
+                        order.getStatus()
+                ))
+                .toList();
     }
 }
