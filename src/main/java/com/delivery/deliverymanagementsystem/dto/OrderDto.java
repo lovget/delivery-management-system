@@ -4,4 +4,5 @@ public record OrderDto(
         Long id,
         String customerName,
         String status
-) {}
+) {
+}
