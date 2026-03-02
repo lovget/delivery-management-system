@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "products")
-public class Product {
+@Table(name = "customers")
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,41 +13,16 @@ public class Product {
 
     private String name;
 
-    private Double price;
+    @OneToMany(mappedBy = "customer")
+    private List<Order> orders;
 
-    @ManyToMany
-    @JoinTable(
-            name = "product_categories",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<Category> categories;
+    public Customer() {}
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
-    public Double getPrice() {
-        return price;
-    }
+    public void setName(String name) { this.name = name; }
 
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
+    public List<Order> getOrders() { return orders; }
 }

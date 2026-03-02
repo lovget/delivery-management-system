@@ -13,8 +13,6 @@ public class Order {
 
     private String status;
 
-    private Double totalAmount;
-
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -30,39 +28,23 @@ public class Order {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
-    public Long getId() {
-        return id;
-    }
+    public Order() {}
 
-    public String getStatus() {
-        return status;
-    }
+    public Long getId() { return id; }
 
-    public Double getTotalAmount() {
-        return totalAmount;
-    }
+    public String getStatus() { return status; }
 
-    public Customer getCustomer() {
-        return customer;
-    }
+    public Customer getCustomer() { return customer; }
 
-    public List<Product> getProducts() {
-        return products;
-    }
+    public List<Product> getProducts() { return products; }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public Payment getPayment() { return payment; }
 
-    public void setTotalAmount(Double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
+    public void setCustomer(Customer customer) { this.customer = customer; }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+    public void setProducts(List<Product> products) { this.products = products; }
+
+    public void setPayment(Payment payment) { this.payment = payment; }
 }

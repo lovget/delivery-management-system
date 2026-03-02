@@ -1,7 +1,6 @@
 package com.delivery.deliverymanagementsystem.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "payments")
@@ -11,58 +10,21 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String method;
+    private String paymentMethod;
 
-    private Double amount;
-
-    private LocalDateTime paidAt;
-
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
-    public Payment() {
-    }
+    public Payment() {}
 
-    public Payment(String method, Double amount, LocalDateTime paidAt) {
-        this.method = method;
-        this.amount = amount;
-        this.paidAt = paidAt;
-    }
+    public Long getId() { return id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getPaymentMethod() { return paymentMethod; }
 
-    public String getMethod() {
-        return method;
-    }
+    public Order getOrder() { return order; }
 
-    public Double getAmount() {
-        return amount;
-    }
+    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
 
-    public LocalDateTime getPaidAt() {
-        return paidAt;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public void setPaidAt(LocalDateTime paidAt) {
-        this.paidAt = paidAt;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+    public void setOrder(Order order) { this.order = order; }
 }
