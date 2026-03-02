@@ -10,21 +10,41 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String paymentMethod;
-
     @OneToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
+    private double amount;
+
+    private String method;
+
     public Payment() {}
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getPaymentMethod() { return paymentMethod; }
+    public Order getOrder() {
+        return order;
+    }
 
-    public Order getOrder() { return order; }
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 
-    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+    public double getAmount() {
+        return amount;
+    }
 
-    public void setOrder(Order order) { this.order = order; }
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
 }

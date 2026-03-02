@@ -1,7 +1,6 @@
 package com.delivery.deliverymanagementsystem.entity;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -13,29 +12,27 @@ public class Product {
 
     private String name;
 
-    private Double price;
-
-    @ManyToMany
-    @JoinTable(
-            name = "product_category",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<Category> categories;
+    private double price;
 
     public Product() {}
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public Double getPrice() { return price; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public List<Category> getCategories() { return categories; }
+    public double getPrice() {
+        return price;
+    }
 
-    public void setName(String name) { this.name = name; }
-
-    public void setPrice(Double price) { this.price = price; }
-
-    public void setCategories(List<Category> categories) { this.categories = categories; }
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }

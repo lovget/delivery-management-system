@@ -1,7 +1,6 @@
 package com.delivery.deliverymanagementsystem.entity;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -13,16 +12,27 @@ public class Customer {
 
     private String name;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
+    private String email;
 
     public Customer() {}
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public List<Order> getOrders() { return orders; }
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

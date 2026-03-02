@@ -11,8 +11,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
-
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -25,26 +23,45 @@ public class Order {
     )
     private List<Product> products;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-    private Payment payment;
+    private String status;
+
+    private double totalAmount;
 
     public Order() {}
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getStatus() { return status; }
+    public Customer getCustomer() {
+        return customer;
+    }
 
-    public Customer getCustomer() { return customer; }
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
-    public List<Product> getProducts() { return products; }
+    public List<Product> getProducts() {
+        return products;
+    }
 
-    public Payment getPayment() { return payment; }
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 
-    public void setStatus(String status) { this.status = status; }
+    public String getStatus() {
+        return status;
+    }
 
-    public void setCustomer(Customer customer) { this.customer = customer; }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-    public void setProducts(List<Product> products) { this.products = products; }
+    public double getTotalAmount() {
+        return totalAmount;
+    }
 
-    public void setPayment(Payment payment) { this.payment = payment; }
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 }
