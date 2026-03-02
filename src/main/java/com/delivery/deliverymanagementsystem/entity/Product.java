@@ -23,9 +23,6 @@ public class Product {
     )
     private List<Category> categories;
 
-    public Product() {
-    }
-
     public Long getId() {
         return id;
     }
