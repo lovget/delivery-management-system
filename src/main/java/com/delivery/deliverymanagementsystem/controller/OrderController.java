@@ -2,7 +2,6 @@ package com.delivery.deliverymanagementsystem.controller;
 
 import com.delivery.deliverymanagementsystem.dto.OrderCreateDto;
 import com.delivery.deliverymanagementsystem.dto.OrderDto;
-import com.delivery.deliverymanagementsystem.entity.Order;
 import com.delivery.deliverymanagementsystem.service.OrderService;
 
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +29,20 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody OrderCreateDto dto) {
-        return orderService.createOrder(
+    public OrderDto createOrder(@RequestBody OrderCreateDto dto) {
+
+        var order = orderService.createOrder(
                 dto.getCustomerId(),
                 dto.getProductIds(),
                 dto.getStatus(),
                 dto.getPaymentMethod()
+        );
+
+        return new OrderDto(
+                order.getId(),
+                order.getCustomer().getName(),
+                order.getStatus(),
+                order.getTotalAmount()
         );
     }
 
