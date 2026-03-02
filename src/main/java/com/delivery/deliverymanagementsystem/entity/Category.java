@@ -1,8 +1,7 @@
 package com.delivery.deliverymanagementsystem.entity;
 
 import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -14,14 +13,10 @@ public class Category {
 
     private String name;
 
-    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
-    private Set<Product> products = new HashSet<>();
+    @ManyToMany(mappedBy = "categories")
+    private List<Product> products;
 
     public Category() {
-    }
-
-    public Category(String name) {
-        this.name = name;
     }
 
     public Long getId() {
@@ -32,7 +27,7 @@ public class Category {
         return name;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
