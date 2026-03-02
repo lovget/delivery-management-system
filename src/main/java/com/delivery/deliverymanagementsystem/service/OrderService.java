@@ -1,7 +1,7 @@
 package com.delivery.deliverymanagementsystem.service;
 
 import com.delivery.deliverymanagementsystem.dto.OrderDto;
-import com.delivery.deliverymanagementsystem.model.Order;
+import com.delivery.deliverymanagementsystem.entity.Order;
 import com.delivery.deliverymanagementsystem.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,22 +21,19 @@ public class OrderService {
                 .stream()
                 .map(order -> new OrderDto(
                         order.getId(),
-                        order.getCustomerName(),
+                        order.getCustomer() != null ? order.getCustomer().getName() : null,
                         order.getStatus()
                 ))
                 .toList();
     }
 
     public OrderDto getOrderById(Long id) {
-        Order order = orderRepository.findById(id);
-
-        if (order == null) {
-            return null;
-        }
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
 
         return new OrderDto(
                 order.getId(),
-                order.getCustomerName(),
+                order.getCustomer() != null ? order.getCustomer().getName() : null,
                 order.getStatus()
         );
     }
@@ -46,9 +43,17 @@ public class OrderService {
                 .stream()
                 .map(order -> new OrderDto(
                         order.getId(),
-                        order.getCustomerName(),
+                        order.getCustomer() != null ? order.getCustomer().getName() : null,
                         order.getStatus()
                 ))
                 .toList();
+    }
+
+    public Order save(Order order) {
+        return orderRepository.save(order);
+    }
+
+    public void delete(Long id) {
+        orderRepository.deleteById(id);
     }
 }
