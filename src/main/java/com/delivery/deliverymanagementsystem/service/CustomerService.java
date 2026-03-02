@@ -1,6 +1,5 @@
 package com.delivery.deliverymanagementsystem.service;
 
-import com.delivery.deliverymanagementsystem.entity.Customer;
 import com.delivery.deliverymanagementsystem.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 

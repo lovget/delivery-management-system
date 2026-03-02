@@ -1,6 +1,5 @@
 package com.delivery.deliverymanagementsystem.controller;
 
-import com.delivery.deliverymanagementsystem.entity.Customer;
 import com.delivery.deliverymanagementsystem.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
