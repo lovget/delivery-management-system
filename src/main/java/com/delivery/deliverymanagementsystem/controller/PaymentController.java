@@ -31,11 +31,6 @@ public class PaymentController {
         return paymentService.getById(id);
     }
 
-    @PutMapping("/{id}")
-    public Payment update(@PathVariable Long id, @RequestBody Payment payment) {
-        return paymentService.update(id, payment);
-    }
-
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         paymentService.delete(id);
