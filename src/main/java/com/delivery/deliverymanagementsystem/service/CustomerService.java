@@ -24,15 +24,15 @@ public class CustomerService {
     }
 
     public Customer getById(Long id) {
-        return customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        return customerRepository.findById(id).orElseThrow();
     }
 
     public Customer update(Long id, Customer customer) {
-        Customer existing = getById(id);
+        Customer existing = customerRepository.findById(id).orElseThrow();
 
         existing.setName(customer.getName());
         existing.setEmail(customer.getEmail());
+        existing.setPhone(customer.getPhone());
 
         return customerRepository.save(existing);
     }

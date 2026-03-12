@@ -14,6 +14,8 @@ public class Customer {
 
     private String email;
 
+    private String phone;
+
     public Customer() {}
 
     public Long getId() {
@@ -34,5 +36,13 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
