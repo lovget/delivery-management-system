@@ -1,6 +1,7 @@
 package com.delivery.deliverymanagementsystem.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "payments")
@@ -17,6 +18,8 @@ public class Payment {
     private double amount;
 
     private String method;
+
+    private LocalDateTime paidAt;
 
     public Payment() {}
 
@@ -46,5 +49,13 @@ public class Payment {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public LocalDateTime getPaidAt() {
+        return paidAt;
+    }
+
+    public void setPaidAt(LocalDateTime paidAt) {
+        this.paidAt = paidAt;
     }
 }
