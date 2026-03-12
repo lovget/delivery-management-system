@@ -16,13 +16,20 @@ public class Category {
     @ManyToMany(mappedBy = "categories")
     private List<Product> products;
 
-    public Category() {}
+    public Long getId() {
+        return id;
+    }
 
-    public Long getId() { return id; }
+    public String getName() {
+        return name;
+    }
 
-    public String getName() { return name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public List<Product> getProducts() {
+        return products;
+    }
 
-    public List<Product> getProducts() { return products; }
 }

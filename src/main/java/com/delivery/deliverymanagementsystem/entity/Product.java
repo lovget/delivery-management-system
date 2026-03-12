@@ -23,7 +23,8 @@ public class Product {
     )
     private List<Category> categories;
 
-    public Product() {}
+    @ManyToMany(mappedBy = "products")
+    private List<Order> orders;
 
     public Long getId() {
         return id;
@@ -49,7 +50,8 @@ public class Product {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
+    public List<Order> getOrders() {
+        return orders;
     }
+
 }

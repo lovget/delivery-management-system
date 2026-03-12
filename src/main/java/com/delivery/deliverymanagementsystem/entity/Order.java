@@ -27,7 +27,8 @@ public class Order {
 
     private double totalAmount;
 
-    public Order() {}
+    @OneToOne(mappedBy = "order")
+    private Payment payment;
 
     public Long getId() {
         return id;
@@ -64,4 +65,9 @@ public class Order {
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
 }

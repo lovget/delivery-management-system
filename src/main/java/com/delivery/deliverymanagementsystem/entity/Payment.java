@@ -21,8 +21,6 @@ public class Payment {
 
     private LocalDateTime paidAt;
 
-    public Payment() {}
-
     public Long getId() {
         return id;
     }
@@ -58,4 +56,5 @@ public class Payment {
     public void setPaidAt(LocalDateTime paidAt) {
         this.paidAt = paidAt;
     }
+
 }
