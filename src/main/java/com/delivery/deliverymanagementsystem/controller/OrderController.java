@@ -1,9 +1,7 @@
 package com.delivery.deliverymanagementsystem.controller;
 
-import com.delivery.deliverymanagementsystem.dto.OrderCreateDto;
-import com.delivery.deliverymanagementsystem.dto.OrderDto;
+import com.delivery.deliverymanagementsystem.entity.Order;
 import com.delivery.deliverymanagementsystem.service.OrderService;
-
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,35 +17,17 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderDto> getAllOrders() {
-        return orderService.getAllOrders();
+    public List<Order> getAll() {
+        return orderService.getAll();
     }
 
-    @GetMapping("/search")
-    public List<OrderDto> getOrdersByStatus(@RequestParam String status) {
-        return orderService.getOrdersByStatus(status);
-    }
-
-    @PostMapping
-    public OrderDto createOrder(@RequestBody OrderCreateDto dto) {
-
-        var order = orderService.createOrder(
-                dto.getCustomerId(),
-                dto.getProductIds(),
-                dto.getStatus(),
-                dto.getPaymentMethod()
-        );
-
-        return new OrderDto(
-                order.getId(),
-                order.getCustomer().getName(),
-                order.getStatus(),
-                order.getTotalAmount()
-        );
+    @GetMapping("/{id}")
+    public Order getById(@PathVariable Long id) {
+        return orderService.getById(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteOrder(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         orderService.delete(id);
     }
 }

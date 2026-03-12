@@ -1,10 +1,9 @@
 package com.delivery.deliverymanagementsystem.service;
 
-import com.delivery.deliverymanagementsystem.dto.OrderDto;
 import com.delivery.deliverymanagementsystem.entity.*;
 import com.delivery.deliverymanagementsystem.repository.*;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,13 +25,11 @@ public class OrderService {
         this.paymentRepository = paymentRepository;
     }
 
-    public Order createOrder(Long customerId,
-                             List<Long> productIds,
-                             String status,
-                             String paymentMethod) {
+    @Transactional
+    public Order createOrder(Long customerId, List<Long> productIds, String status, String paymentMethod) {
 
         Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow();
 
         List<Product> products = productRepository.findAllById(productIds);
 
@@ -58,28 +55,12 @@ public class OrderService {
         return savedOrder;
     }
 
-    public List<OrderDto> getAllOrders() {
-        return orderRepository.findAll()
-                .stream()
-                .map(order -> new OrderDto(
-                        order.getId(),
-                        order.getCustomer().getName(),
-                        order.getStatus(),
-                        order.getTotalAmount()
-                ))
-                .toList();
+    public List<Order> getAll() {
+        return orderRepository.findAll();
     }
 
-    public List<OrderDto> getOrdersByStatus(String status) {
-        return orderRepository.findByStatus(status)
-                .stream()
-                .map(order -> new OrderDto(
-                        order.getId(),
-                        order.getCustomer().getName(),
-                        order.getStatus(),
-                        order.getTotalAmount()
-                ))
-                .toList();
+    public Order getById(Long id) {
+        return orderRepository.findById(id).orElseThrow();
     }
 
     public void delete(Long id) {
