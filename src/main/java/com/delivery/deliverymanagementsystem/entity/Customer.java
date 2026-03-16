@@ -1,6 +1,8 @@
 package com.delivery.deliverymanagementsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
@@ -18,6 +20,7 @@ public class Customer {
     private String phone;
 
     @OneToMany(mappedBy = "customer")
+    @JsonIgnore
     private List<Order> orders;
 
     public Long getId() {
@@ -51,5 +54,4 @@ public class Customer {
     public List<Order> getOrders() {
         return orders;
     }
-
 }
