@@ -27,7 +27,7 @@ public class Order {
 
     private double totalAmount;
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
     public Long getId() {

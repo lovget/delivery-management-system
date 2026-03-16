@@ -25,6 +25,10 @@ public class OrderService {
         this.paymentRepository = paymentRepository;
     }
 
+    public Order save(Order order) {
+        return orderRepository.save(order);
+    }
+
     @Transactional
     public Order createOrder(Long customerId, List<Long> productIds, String status, String paymentMethod) {
 

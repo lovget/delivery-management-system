@@ -41,4 +41,11 @@ public class OrderController {
     public void delete(@PathVariable Long id) {
         orderService.delete(id);
     }
+
+    @PatchMapping("/{id}/status")
+    public Order updateStatus(@PathVariable Long id, @RequestParam String status) {
+        Order order = orderService.getById(id);
+        order.setStatus(status);
+        return orderService.save(order);
+    }
 }
