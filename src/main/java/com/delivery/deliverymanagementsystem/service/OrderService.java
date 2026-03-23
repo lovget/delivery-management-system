@@ -8,8 +8,8 @@ import com.delivery.deliverymanagementsystem.repository.CustomerRepository;
 import com.delivery.deliverymanagementsystem.repository.OrderRepository;
 import com.delivery.deliverymanagementsystem.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,6 +35,7 @@ public class OrderService {
         return orderRepository.findById(id).orElseThrow();
     }
 
+    @Transactional
     public Order createOrder(OrderCreateDto dto) {
 
         Customer customer = customerRepository.findById(dto.getCustomerId())
@@ -49,13 +50,6 @@ public class OrderService {
         order.setProducts(products);
         order.setStatus(dto.getStatus());
         order.setTotalAmount(0);
-
-        for (Product product : products) {
-            if (product.getOrders() == null) {
-                product.setOrders(new ArrayList<>());
-            }
-            product.getOrders().add(order);
-        }
 
         return orderRepository.save(order);
     }
