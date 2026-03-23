@@ -29,23 +29,11 @@ public class OrderController {
 
     @PostMapping
     public Order create(@RequestBody OrderCreateDto dto) {
-        return orderService.createOrder(
-                dto.getCustomerId(),
-                dto.getProductIds(),
-                dto.getStatus(),
-                dto.getPaymentMethod()
-        );
+        return orderService.createOrder(dto);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         orderService.delete(id);
-    }
-
-    @PatchMapping("/{id}/status")
-    public Order updateStatus(@PathVariable Long id, @RequestParam String status) {
-        Order order = orderService.getById(id);
-        order.setStatus(status);
-        return orderService.save(order);
     }
 }
