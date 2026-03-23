@@ -1,6 +1,7 @@
 package com.delivery.deliverymanagementsystem.entity;
 
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
@@ -13,23 +14,14 @@ public class Category {
 
     private String name;
 
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany(mappedBy = "categories")
     private List<Product> products;
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public String getName() { return name; }
+    public List<Product> getProducts() { return products; }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
+    public void setId(Long id) { this.id = id; }
+    public void setName(String name) { this.name = name; }
+    public void setProducts(List<Product> products) { this.products = products; }
 }
