@@ -1,9 +1,8 @@
 package com.delivery.deliverymanagementsystem.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,8 +14,6 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    @JsonBackReference
     private Customer customer;
 
     @ManyToMany
@@ -25,8 +22,7 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    @JsonIgnore
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>();
 
     private String status;
 
