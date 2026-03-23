@@ -2,6 +2,7 @@ package com.delivery.deliverymanagementsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
@@ -16,17 +17,9 @@ public class Customer {
     private String email;
     private String phone;
 
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     @JsonManagedReference
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Order> orders;
-
-    public Customer() {}
-
-    public Customer(String name, String email, String phone) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-    }
 
     public Long getId() { return id; }
     public String getName() { return name; }
