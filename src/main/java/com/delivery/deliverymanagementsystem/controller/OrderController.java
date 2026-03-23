@@ -33,6 +33,12 @@ public class OrderController {
         return "OK";
     }
 
+    @PatchMapping("/{id}/status")
+    public Order updateStatus(@PathVariable Long id,
+                              @RequestParam String status) {
+        return orderService.updateStatus(id, status);
+    }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         orderService.delete(id);
