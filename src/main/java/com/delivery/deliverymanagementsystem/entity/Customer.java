@@ -18,18 +18,16 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Order> orders;
 
-    // 🔹 ОБЯЗАТЕЛЬНО (для Spring)
     public Customer() {
     }
 
-    // 🔹 Конструктор (необязательно, но удобно)
+
     public Customer(String name, String email, String phone) {
         this.name = name;
         this.email = email;
         this.phone = phone;
     }
 
-    // 🔹 Геттеры
     public Long getId() {
         return id;
     }
@@ -50,7 +48,6 @@ public class Customer {
         return orders;
     }
 
-    // 🔹 Сеттеры (КРИТИЧНО для JSON)
     public void setId(Long id) {
         this.id = id;
     }
