@@ -35,13 +35,19 @@ public class OrderService {
     }
 
     public Order createOrder(OrderCreateDto dto) {
-        Customer customer = customerRepository.findById(dto.getCustomerId()).orElseThrow();
-        List<Product> products = productRepository.findAllById(dto.getProductIds());
+
+        Customer customer = customerRepository.findById(dto.getCustomerId())
+                .orElseThrow();
+
+        List<Product> products = dto.getProductIds().stream()
+                .map(id -> productRepository.findById(id).orElseThrow())
+                .toList();
 
         Order order = new Order();
         order.setCustomer(customer);
         order.setProducts(products);
         order.setStatus(dto.getStatus());
+        order.setTotalAmount(0);
 
         return orderRepository.save(order);
     }

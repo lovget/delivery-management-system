@@ -28,8 +28,9 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order create(@RequestBody OrderCreateDto dto) {
-        return orderService.createOrder(dto);
+    public String create(@RequestBody OrderCreateDto dto) {
+        orderService.createOrder(dto);
+        return "OK";
     }
 
     @DeleteMapping("/{id}")
