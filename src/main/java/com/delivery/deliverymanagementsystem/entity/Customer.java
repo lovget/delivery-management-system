@@ -1,8 +1,6 @@
 package com.delivery.deliverymanagementsystem.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -14,15 +12,24 @@ public class Customer {
     private Long id;
 
     private String name;
-
     private String email;
-
     private String phone;
 
-    @OneToMany(mappedBy = "customer")
-    @JsonIgnore
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Order> orders;
 
+    // 🔹 ОБЯЗАТЕЛЬНО (для Spring)
+    public Customer() {
+    }
+
+    // 🔹 Конструктор (необязательно, но удобно)
+    public Customer(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    // 🔹 Геттеры
     public Long getId() {
         return id;
     }
@@ -31,27 +38,36 @@ public class Customer {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPhone() {
         return phone;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    // 🔹 Сеттеры (КРИТИЧНО для JSON)
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }
