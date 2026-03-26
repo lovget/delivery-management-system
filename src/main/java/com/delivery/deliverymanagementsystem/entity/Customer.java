@@ -15,7 +15,9 @@ public class Customer {
 
     private String name;
     private String email;
+    @Column (length = 15)
     private String phone;
+
 
     @OneToMany(mappedBy = "customer")
     @JsonIgnore
