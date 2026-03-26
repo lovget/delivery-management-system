@@ -1,7 +1,6 @@
 package com.delivery.deliverymanagementsystem.entity;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "order_products",
             joinColumns = @JoinColumn(name = "order_id"),
@@ -25,19 +24,48 @@ public class Order {
     )
     private List<Product> products = new ArrayList<>();
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     private double totalAmount;
 
-    public Long getId() { return id; }
-    public Customer getCustomer() { return customer; }
-    public List<Product> getProducts() { return products; }
-    public String getStatus() { return status; }
-    public double getTotalAmount() { return totalAmount; }
+    public Long getId() {
+        return id;
+    }
 
-    public void setId(Long id) { this.id = id; }
-    public void setCustomer(Customer customer) { this.customer = customer; }
-    public void setProducts(List<Product> products) { this.products = products; }
-    public void setStatus(String status) { this.status = status; }
-    public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 }

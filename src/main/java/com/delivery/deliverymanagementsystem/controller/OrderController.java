@@ -2,6 +2,7 @@ package com.delivery.deliverymanagementsystem.controller;
 
 import com.delivery.deliverymanagementsystem.dto.OrderCreateDto;
 import com.delivery.deliverymanagementsystem.entity.Order;
+import com.delivery.deliverymanagementsystem.entity.OrderStatus;
 import com.delivery.deliverymanagementsystem.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ public class OrderController {
 
     @PatchMapping("/{id}/status")
     public Order updateStatus(@PathVariable Long id,
-                              @RequestParam String status) {
+                              @RequestParam OrderStatus status) { // ✅ ВОТ ЭТО ВАЖНО
         return orderService.updateStatus(id, status);
     }
 

@@ -1,6 +1,5 @@
 package com.delivery.deliverymanagementsystem.service;
 
-import com.delivery.deliverymanagementsystem.dto.OrderCreateDto;
 import com.delivery.deliverymanagementsystem.entity.Customer;
 import com.delivery.deliverymanagementsystem.entity.Order;
 import com.delivery.deliverymanagementsystem.entity.Product;
