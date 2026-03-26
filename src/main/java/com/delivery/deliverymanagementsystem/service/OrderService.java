@@ -1,12 +1,15 @@
 package com.delivery.deliverymanagementsystem.service;
 
+import com.delivery.deliverymanagementsystem.dto.OrderCreateDto;
 import com.delivery.deliverymanagementsystem.entity.Customer;
 import com.delivery.deliverymanagementsystem.entity.Order;
+import com.delivery.deliverymanagementsystem.entity.OrderStatus;
 import com.delivery.deliverymanagementsystem.entity.Product;
 import com.delivery.deliverymanagementsystem.repository.CustomerRepository;
 import com.delivery.deliverymanagementsystem.repository.OrderRepository;
 import com.delivery.deliverymanagementsystem.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,6 +36,7 @@ public class OrderService {
         return orderRepository.findById(id).orElseThrow();
     }
 
+    @Transactional
     public Order createOrder(OrderCreateDto dto) {
 
         Customer customer = customerRepository.findById(dto.getCustomerId())
@@ -45,17 +49,16 @@ public class OrderService {
         Order order = new Order();
         order.setCustomer(customer);
         order.setProducts(products);
-        order.setStatus(dto.getStatus());
+        order.setStatus(dto.getStatus()); // ✅ теперь enum
         order.setTotalAmount(0);
 
         return orderRepository.save(order);
     }
 
-    public Order updateStatus(Long id, String status) {
+    @Transactional
+    public Order updateStatus(Long id, OrderStatus status) {
 
-        Order order = orderRepository.findById(id)
-                .orElseThrow();
-
+        Order order = orderRepository.findById(id).orElseThrow();
         order.setStatus(status);
 
         return orderRepository.save(order);
