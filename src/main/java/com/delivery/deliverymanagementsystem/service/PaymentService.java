@@ -31,7 +31,6 @@ public class PaymentService {
     public Payment update(Long id, Payment updated) {
         Payment payment = getById(id);
         payment.setMethod(updated.getMethod());
-        payment.setAmount(updated.getAmount());
         payment.setPaidAt(updated.getPaidAt());
         return paymentRepository.save(payment);
     }
