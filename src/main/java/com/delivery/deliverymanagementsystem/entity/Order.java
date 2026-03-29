@@ -16,7 +16,7 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "order_products",
             joinColumns = @JoinColumn(name = "order_id"),
