@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,10 +45,12 @@ public class OrderService {
         Customer customer = customerRepository.findById(dto.getCustomerId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
 
-        List<Product> products = dto.getProductIds().stream()
-                .map(id -> productRepository.findById(id)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found: " + id)))
-                .toList();
+        List<Product> products = new ArrayList<>();
+        for (Long id : dto.getProductIds()) {
+            Product product = productRepository.findById(id)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found: " + id));
+            products.add(product);
+        }
 
         Order order = new Order();
         order.setCustomer(customer);
@@ -81,10 +84,14 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    @Transactional
     public void delete(Long id) {
-        if (!orderRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
-        }
-        orderRepository.deleteById(id);
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
+
+        order.getProducts().clear();
+        orderRepository.save(order);
+
+        orderRepository.delete(order);
     }
 }
