@@ -69,7 +69,7 @@ public class OrderService {
 
         orderRepository.save(order);
 
-        throw new RuntimeException("Rollback test");
+        throw new IllegalStateException("Rollback test");
     }
 
     @Transactional
