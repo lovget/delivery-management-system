@@ -29,9 +29,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public String create(@RequestBody OrderCreateDto dto) {
-        orderService.createOrder(dto);
-        return "OK";
+    public Order create(@RequestBody OrderCreateDto dto) {
+        return orderService.createOrder(dto);
     }
 
     @PatchMapping("/{id}/status")
