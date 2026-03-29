@@ -38,9 +38,7 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(OrderCreateDto dto) {
-
-        Customer customer = customerRepository.findById(dto.getCustomerId())
-                .orElseThrow();
+        Customer customer = customerRepository.findById(dto.getCustomerId()).orElseThrow();
 
         List<Product> products = dto.getProductIds().stream()
                 .map(id -> productRepository.findById(id).orElseThrow())
@@ -49,18 +47,33 @@ public class OrderService {
         Order order = new Order();
         order.setCustomer(customer);
         order.setProducts(products);
-        order.setStatus(dto.getStatus()); // ✅ теперь enum
+        order.setStatus(dto.getStatus());
         order.setTotalAmount(0);
 
         return orderRepository.save(order);
     }
 
     @Transactional
-    public Order updateStatus(Long id, OrderStatus status) {
+    public Order createOrderWithError(OrderCreateDto dto) {
+        Customer customer = customerRepository.findById(dto.getCustomerId()).orElseThrow();
 
+        Order order = new Order();
+        order.setCustomer(customer);
+        order.setStatus(dto.getStatus());
+
+        orderRepository.save(order);
+
+        if (true) {
+            throw new RuntimeException();
+        }
+
+        return order;
+    }
+
+    @Transactional
+    public Order updateStatus(Long id, OrderStatus status) {
         Order order = orderRepository.findById(id).orElseThrow();
         order.setStatus(status);
-
         return orderRepository.save(order);
     }
 
