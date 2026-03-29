@@ -46,9 +46,10 @@ public class OrderService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
 
         List<Product> products = new ArrayList<>();
-        for (Long id : dto.getProductIds()) {
-            Product product = productRepository.findById(id)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found: " + id));
+
+        for (Long productId : dto.getProductIds()) {
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found: " + productId));
             products.add(product);
         }
 
@@ -62,20 +63,6 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrderWithError(OrderCreateDto dto) {
-        Customer customer = customerRepository.findById(dto.getCustomerId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
-
-        Order order = new Order();
-        order.setCustomer(customer);
-        order.setStatus(dto.getStatus());
-
-        orderRepository.save(order);
-
-        throw new IllegalStateException("Rollback test");
-    }
-
-    @Transactional
     public Order updateStatus(Long id, OrderStatus status) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
@@ -84,14 +71,10 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    @Transactional
     public void delete(Long id) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
-
-        order.getProducts().clear();
-        orderRepository.save(order);
-
-        orderRepository.delete(order);
+        if (!orderRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
+        }
+        orderRepository.deleteById(id);
     }
 }
