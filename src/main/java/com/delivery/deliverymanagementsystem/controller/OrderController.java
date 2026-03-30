@@ -35,7 +35,7 @@ public class OrderController {
 
     @PatchMapping("/{id}/status")
     public Order updateStatus(@PathVariable Long id,
-                              @RequestParam OrderStatus status) { // ✅ ВОТ ЭТО ВАЖНО
+                              @RequestParam OrderStatus status) {
         return orderService.updateStatus(id, status);
     }
 
