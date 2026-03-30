@@ -17,7 +17,9 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category create(@RequestBody Category category) {
+    public Category create(@RequestBody String name) {
+        Category category = new Category();
+        category.setName(name);
         return categoryService.create(category);
     }
 
@@ -32,7 +34,9 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public Category update(@PathVariable Long id, @RequestBody Category category) {
+    public Category update(@PathVariable Long id, @RequestBody String name) {
+        Category category = new Category();
+        category.setName(name);
         return categoryService.update(id, category);
     }
 

@@ -17,7 +17,10 @@ public class PaymentController {
     }
 
     @PostMapping
-    public Payment create(@RequestBody Payment payment) {
+    public Payment create(@RequestBody Payment request) {
+        Payment payment = new Payment();
+        payment.setMethod(request.getMethod());
+        payment.setOrder(request.getOrder());
         return paymentService.create(payment);
     }
 
