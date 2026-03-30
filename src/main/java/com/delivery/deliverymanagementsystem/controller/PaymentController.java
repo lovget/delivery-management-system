@@ -7,6 +7,7 @@ import com.delivery.deliverymanagementsystem.service.OrderService;
 import com.delivery.deliverymanagementsystem.service.PaymentService;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -30,6 +31,7 @@ public class PaymentController {
         Payment payment = new Payment();
         payment.setMethod(dto.getMethod());
         payment.setAmount(dto.getAmount());
+        payment.setPaidAt(LocalDateTime.now());
         payment.setOrder(order);
 
         return paymentService.create(payment);
