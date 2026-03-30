@@ -1,7 +1,6 @@
 package com.delivery.deliverymanagementsystem.dto;
 
 public class CustomerCreateDto {
-
     private String name;
     private String email;
     private String phone;

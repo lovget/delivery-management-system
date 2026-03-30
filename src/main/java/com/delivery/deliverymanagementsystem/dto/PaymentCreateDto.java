@@ -1,7 +1,6 @@
 package com.delivery.deliverymanagementsystem.dto;
 
 public class PaymentCreateDto {
-
     private String method;
     private Double amount;
     private Long orderId;
