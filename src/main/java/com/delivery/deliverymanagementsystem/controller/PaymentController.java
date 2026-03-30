@@ -29,7 +29,6 @@ public class PaymentController {
 
         Payment payment = new Payment();
         payment.setMethod(dto.getMethod());
-        payment.setAmount(dto.getAmount());
         payment.setOrder(order);
 
         return paymentService.create(payment);
