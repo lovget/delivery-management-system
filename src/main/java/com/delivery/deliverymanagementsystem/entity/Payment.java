@@ -13,12 +13,14 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "order_id")
     @JsonIgnore
     private Order order;
 
     private String method;
+
+    private Double amount;
 
     private LocalDateTime paidAt;
 
@@ -40,6 +42,14 @@ public class Payment {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
     public LocalDateTime getPaidAt() {
