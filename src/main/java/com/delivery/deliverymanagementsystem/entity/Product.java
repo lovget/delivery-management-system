@@ -17,7 +17,7 @@ public class Product {
 
     private double price;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "product_categories",
             joinColumns = @JoinColumn(name = "product_id"),
