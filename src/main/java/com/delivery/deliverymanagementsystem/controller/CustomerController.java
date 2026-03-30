@@ -1,5 +1,6 @@
 package com.delivery.deliverymanagementsystem.controller;
 
+import com.delivery.deliverymanagementsystem.dto.CustomerCreateDto;
 import com.delivery.deliverymanagementsystem.entity.Customer;
 import com.delivery.deliverymanagementsystem.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +18,11 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer create(@RequestBody Customer request) {
+    public Customer create(@RequestBody CustomerCreateDto dto) {
         Customer customer = new Customer();
-        customer.setName(request.getName());
-        customer.setEmail(request.getEmail());
-        customer.setPhone(request.getPhone());
+        customer.setName(dto.getName());
+        customer.setEmail(dto.getEmail());
+        customer.setPhone(dto.getPhone());
         return customerService.create(customer);
     }
 
@@ -36,11 +37,11 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public Customer update(@PathVariable Long id, @RequestBody Customer request) {
+    public Customer update(@PathVariable Long id, @RequestBody CustomerCreateDto dto) {
         Customer customer = new Customer();
-        customer.setName(request.getName());
-        customer.setEmail(request.getEmail());
-        customer.setPhone(request.getPhone());
+        customer.setName(dto.getName());
+        customer.setEmail(dto.getEmail());
+        customer.setPhone(dto.getPhone());
         return customerService.update(id, customer);
     }
 
