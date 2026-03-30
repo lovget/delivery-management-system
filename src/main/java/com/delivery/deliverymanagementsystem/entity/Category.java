@@ -1,5 +1,6 @@
 package com.delivery.deliverymanagementsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class Category {
     private String name;
 
     @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
     private List<Product> products;
 
     public Long getId() { return id; }
