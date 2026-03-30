@@ -42,6 +42,7 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(OrderCreateDto dto) {
+
         Customer customer = customerRepository.findById(dto.getCustomerId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
 
@@ -57,7 +58,13 @@ public class OrderService {
         order.setCustomer(customer);
         order.setProducts(products);
         order.setStatus(dto.getStatus());
-        order.setTotalAmount(0);
+
+        double total = 0;
+        for (Product p : products) {
+            total += p.getPrice();
+        }
+
+        order.setTotalAmount(total);
 
         return orderRepository.save(order);
     }
