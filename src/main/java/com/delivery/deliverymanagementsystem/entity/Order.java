@@ -29,20 +29,15 @@ public class Order {
 
     private double totalAmount;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-    private Payment payment;
-
     public Long getId() { return id; }
     public Customer getCustomer() { return customer; }
     public List<Product> getProducts() { return products; }
     public OrderStatus getStatus() { return status; }
     public double getTotalAmount() { return totalAmount; }
-    public Payment getPayment() { return payment; }
 
     public void setId(Long id) { this.id = id; }
     public void setCustomer(Customer customer) { this.customer = customer; }
     public void setProducts(List<Product> products) { this.products = products; }
     public void setStatus(OrderStatus status) { this.status = status; }
     public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
-    public void setPayment(Payment payment) { this.payment = payment; }
 }
