@@ -46,6 +46,10 @@ public class OrderService {
         Customer customer = customerRepository.findById(dto.getCustomerId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
 
+        if (dto.getProductIds() == null || dto.getProductIds().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "products required");
+        }
+
         List<Product> products = new ArrayList<>();
 
         for (Long productId : dto.getProductIds()) {
@@ -57,7 +61,7 @@ public class OrderService {
         Order order = new Order();
         order.setCustomer(customer);
         order.setProducts(products);
-        order.setStatus(dto.getStatus());
+        order.setStatus(dto.getStatus() != null ? dto.getStatus() : OrderStatus.NEW);
 
         double total = 0;
         for (Product p : products) {
