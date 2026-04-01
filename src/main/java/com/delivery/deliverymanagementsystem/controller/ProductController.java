@@ -1,7 +1,6 @@
 package com.delivery.deliverymanagementsystem.controller;
 
 import com.delivery.deliverymanagementsystem.dto.ProductCreateDto;
-import com.delivery.deliverymanagementsystem.entity.Category;
 import com.delivery.deliverymanagementsystem.entity.Product;
 import com.delivery.deliverymanagementsystem.service.ProductService;
 import org.springframework.web.bind.annotation.*;
