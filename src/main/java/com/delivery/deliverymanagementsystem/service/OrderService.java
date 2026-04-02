@@ -9,6 +9,8 @@ import com.delivery.deliverymanagementsystem.entity.Product;
 import com.delivery.deliverymanagementsystem.repository.CustomerRepository;
 import com.delivery.deliverymanagementsystem.repository.OrderRepository;
 import com.delivery.deliverymanagementsystem.repository.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,8 @@ import java.util.*;
 
 @Service
 public class OrderService {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
 
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
@@ -48,7 +52,7 @@ public class OrderService {
         OrderFilter key = new OrderFilter(status, amount);
 
         if (cache.containsKey(key)) {
-            System.out.println("FROM CACHE");
+            log.info("FROM CACHE");
             return cache.get(key);
         }
 
