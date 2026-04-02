@@ -9,6 +9,6 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Override
-    @EntityGraph(attributePaths = {"customer", "products"})
+    @EntityGraph(attributePaths = {"customer", "products", "products.categories"})
     List<Order> findAll();
 }
