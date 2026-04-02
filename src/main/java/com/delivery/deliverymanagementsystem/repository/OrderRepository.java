@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -17,10 +18,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAll();
 
     @Query("SELECT o FROM Order o WHERE o.status = :status AND o.totalAmount > :amount")
-    List<Order> findByStatusAndAmount(OrderStatus status, double amount);
+    List<Order> findByStatusAndAmount(@Param("status") OrderStatus status,
+                                      @Param("amount") double amount);
 
     @Query(value = "SELECT * FROM orders WHERE status = :status AND total_amount > :amount", nativeQuery = true)
-    List<Order> findByStatusAndAmountNative(String status, double amount);
+    List<Order> findByStatusAndAmountNative(@Param("status") String status,
+                                            @Param("amount") double amount);
 
     Page<Order> findAll(Pageable pageable);
 }

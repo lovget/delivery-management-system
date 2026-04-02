@@ -62,6 +62,10 @@ public class OrderService {
         return result;
     }
 
+    public List<Order> getFilteredNative(OrderStatus status, double amount) {
+        return orderRepository.findByStatusAndAmountNative(status.name(), amount);
+    }
+
     public Page<Order> getPaged(int page, int size) {
         return orderRepository.findAll(PageRequest.of(page, size));
     }

@@ -35,6 +35,12 @@ public class OrderController {
         return orderService.getFiltered(status, amount);
     }
 
+    @GetMapping("/filter/native")
+    public List<Order> filterNative(@RequestParam OrderStatus status,
+                                    @RequestParam double amount) {
+        return orderService.getFilteredNative(status, amount);
+    }
+
     @GetMapping("/page")
     public Page<Order> page(@RequestParam int page,
                             @RequestParam int size) {
