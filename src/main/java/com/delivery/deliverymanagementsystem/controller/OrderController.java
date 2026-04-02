@@ -4,6 +4,7 @@ import com.delivery.deliverymanagementsystem.dto.OrderCreateDto;
 import com.delivery.deliverymanagementsystem.entity.Order;
 import com.delivery.deliverymanagementsystem.entity.OrderStatus;
 import com.delivery.deliverymanagementsystem.service.OrderService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,18 @@ public class OrderController {
     @GetMapping("/{id}")
     public Order getById(@PathVariable Long id) {
         return orderService.getById(id);
+    }
+
+    @GetMapping("/filter")
+    public List<Order> filter(@RequestParam OrderStatus status,
+                              @RequestParam double amount) {
+        return orderService.getFiltered(status, amount);
+    }
+
+    @GetMapping("/page")
+    public Page<Order> page(@RequestParam int page,
+                            @RequestParam int size) {
+        return orderService.getPaged(page, size);
     }
 
     @PostMapping

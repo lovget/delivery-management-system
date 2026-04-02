@@ -1,6 +1,7 @@
 package com.delivery.deliverymanagementsystem.service;
 
 import com.delivery.deliverymanagementsystem.dto.OrderCreateDto;
+import com.delivery.deliverymanagementsystem.dto.OrderFilter;
 import com.delivery.deliverymanagementsystem.entity.Customer;
 import com.delivery.deliverymanagementsystem.entity.Order;
 import com.delivery.deliverymanagementsystem.entity.OrderStatus;
@@ -8,13 +9,14 @@ import com.delivery.deliverymanagementsystem.entity.Product;
 import com.delivery.deliverymanagementsystem.repository.CustomerRepository;
 import com.delivery.deliverymanagementsystem.repository.OrderRepository;
 import com.delivery.deliverymanagementsystem.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -22,6 +24,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
+
+    private final Map<OrderFilter, List<Order>> cache = new HashMap<>();
 
     public OrderService(OrderRepository orderRepository,
                         CustomerRepository customerRepository,
@@ -38,6 +42,24 @@ public class OrderService {
     public Order getById(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
+    }
+
+    public List<Order> getFiltered(OrderStatus status, double amount) {
+        OrderFilter key = new OrderFilter(status, amount);
+
+        if (cache.containsKey(key)) {
+            System.out.println("FROM CACHE");
+            return cache.get(key);
+        }
+
+        List<Order> result = orderRepository.findByStatusAndAmount(status, amount);
+        cache.put(key, result);
+
+        return result;
+    }
+
+    public Page<Order> getPaged(int page, int size) {
+        return orderRepository.findAll(PageRequest.of(page, size));
     }
 
     @Transactional
@@ -70,7 +92,11 @@ public class OrderService {
 
         order.setTotalAmount(total);
 
-        return orderRepository.save(order);
+        Order saved = orderRepository.save(order);
+
+        cache.clear();
+
+        return saved;
     }
 
     @Transactional
@@ -79,13 +105,21 @@ public class OrderService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
 
         order.setStatus(status);
-        return orderRepository.save(order);
+
+        Order updated = orderRepository.save(order);
+
+        cache.clear();
+
+        return updated;
     }
 
     public void delete(Long id) {
         if (!orderRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
         }
+
         orderRepository.deleteById(id);
+
+        cache.clear();
     }
 }
