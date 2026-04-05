@@ -66,6 +66,14 @@ public class OrderService {
         return orderRepository.findByStatusAndAmountNative(status.name(), amount);
     }
 
+    public List<Order> getByCustomerName(String name, double amount) {
+        return orderRepository.findByCustomerNameAndAmount(name, amount);
+    }
+
+    public List<Order> getByCustomerNameNative(String name, double amount) {
+        return orderRepository.findByCustomerNameAndAmountNative(name, amount);
+    }
+
     public Page<Order> getPaged(int page, int size) {
         return orderRepository.findAll(PageRequest.of(page, size));
     }
