@@ -25,13 +25,18 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByStatusAndAmountNative(@Param("status") String status,
                                             @Param("amount") double amount);
 
-    @Query("SELECT o FROM Order o JOIN o.customer c WHERE c.name = :name AND o.totalAmount > :amount")
-    List<Order> findByCustomerNameAndAmount(@Param("name") String name,
-                                            @Param("amount") double amount);
+    @Query("SELECT o FROM Order o JOIN o.customer c JOIN o.products p WHERE c.name = :name AND p.price > :price")
+    List<Order> findComplex(@Param("name") String name,
+                            @Param("price") double price);
 
-    @Query(value = "SELECT o.* FROM orders o JOIN customers c ON o.customer_id = c.id WHERE c.name = :name AND o.total_amount > :amount", nativeQuery = true)
-    List<Order> findByCustomerNameAndAmountNative(@Param("name") String name,
-                                                  @Param("amount") double amount);
+    @Query(value = "SELECT DISTINCT o.* FROM orders o " +
+            "JOIN customers c ON o.customer_id = c.id " +
+            "JOIN order_products op ON o.id = op.order_id " +
+            "JOIN products p ON p.id = op.product_id " +
+            "WHERE c.name = :name AND p.price > :price",
+            nativeQuery = true)
+    List<Order> findComplexNative(@Param("name") String name,
+                                  @Param("price") double price);
 
     Page<Order> findAll(Pageable pageable);
 }
