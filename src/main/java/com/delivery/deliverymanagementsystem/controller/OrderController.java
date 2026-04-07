@@ -41,16 +41,16 @@ public class OrderController {
         return orderService.getFilteredNative(status, amount);
     }
 
-    @GetMapping("/filter/complex")
-    public List<Order> complex(@RequestParam String name,
-                               @RequestParam double price) {
-        return orderService.getComplex(name, price);
+    @GetMapping("/filter/by-customer")
+    public List<Order> filterByCustomer(@RequestParam String name,
+                                        @RequestParam double amount) {
+        return orderService.getByCustomerName(name, amount);
     }
 
-    @GetMapping("/filter/complex/native")
-    public List<Order> complexNative(@RequestParam String name,
-                                     @RequestParam double price) {
-        return orderService.getComplexNative(name, price);
+    @GetMapping("/filter/by-customer/native")
+    public List<Order> filterByCustomerNative(@RequestParam String name,
+                                              @RequestParam double amount) {
+        return orderService.getByCustomerNameNative(name, amount);
     }
 
     @GetMapping("/page")
