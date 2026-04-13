@@ -2,8 +2,8 @@ package com.delivery.deliverymanagementsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -25,7 +25,7 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    private List<Product> products = new ArrayList<>();
+    private Set<Product> products = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
@@ -34,13 +34,13 @@ public class Order {
 
     public Long getId() { return id; }
     public Customer getCustomer() { return customer; }
-    public List<Product> getProducts() { return products; }
+    public Set<Product> getProducts() { return products; }
     public OrderStatus getStatus() { return status; }
     public double getTotalAmount() { return totalAmount; }
 
     public void setId(Long id) { this.id = id; }
     public void setCustomer(Customer customer) { this.customer = customer; }
-    public void setProducts(List<Product> products) { this.products = products; }
+    public void setProducts(Set<Product> products) { this.products = products; }
     public void setStatus(OrderStatus status) { this.status = status; }
     public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
 }

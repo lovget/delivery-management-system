@@ -3,7 +3,8 @@ package com.delivery.deliverymanagementsystem.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "categories")
@@ -17,13 +18,13 @@ public class Category {
 
     @ManyToMany(mappedBy = "categories")
     @JsonIgnore
-    private List<Product> products;
+    private Set<Product> products = new HashSet<>();
 
     public Long getId() { return id; }
     public String getName() { return name; }
-    public List<Product> getProducts() { return products; }
+    public Set<Product> getProducts() { return products; }
 
     public void setId(Long id) { this.id = id; }
     public void setName(String name) { this.name = name; }
-    public void setProducts(List<Product> products) { this.products = products; }
+    public void setProducts(Set<Product> products) { this.products = products; }
 }
