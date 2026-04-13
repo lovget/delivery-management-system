@@ -25,7 +25,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByStatusAndAmount(@Param("status") OrderStatus status,
                                       @Param("amount") double amount);
 
-    @EntityGraph(attributePaths = {"customer", "products", "products.categories"})
     @Query(value = "SELECT DISTINCT o.* FROM orders o " +
             "JOIN customers c ON c.id = o.customer_id " +
             "JOIN order_products op ON o.id = op.order_id " +
@@ -44,7 +43,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByCustomerNameAndAmount(@Param("name") String name,
                                             @Param("amount") double amount);
 
-    @EntityGraph(attributePaths = {"customer", "products", "products.categories"})
     @Query(value = "SELECT DISTINCT o.* FROM orders o " +
             "JOIN customers c ON o.customer_id = c.id " +
             "JOIN order_products op ON o.id = op.order_id " +
