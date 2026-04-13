@@ -17,15 +17,6 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping
-    public Product create(@RequestBody ProductCreateDto dto) {
-        Product product = new Product();
-        product.setName(dto.getName());
-        product.setPrice(dto.getPrice());
-        product.setCategories(dto.getCategories());
-        return productService.create(product);
-    }
-
     @GetMapping
     public List<Product> getAll() {
         return productService.getAll();
@@ -36,13 +27,9 @@ public class ProductController {
         return productService.getById(id);
     }
 
-    @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody ProductCreateDto dto) {
-        Product product = new Product();
-        product.setName(dto.getName());
-        product.setPrice(dto.getPrice());
-        product.setCategories(dto.getCategories());
-        return productService.update(id, product);
+    @PostMapping
+    public Product create(@RequestBody ProductCreateDto dto) {
+        return productService.create(dto);
     }
 
     @DeleteMapping("/{id}")

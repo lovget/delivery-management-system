@@ -63,45 +63,15 @@ public class OrderService {
     }
 
     public List<Order> getFilteredNative(OrderStatus status, double amount) {
-        OrderFilter key = new OrderFilter(status, amount);
-
-        if (cache.containsKey(key)) {
-            log.info("FROM CACHE");
-            return cache.get(key);
-        }
-
-        List<Order> result = orderRepository.findByStatusAndAmountNative(status.name(), amount);
-        cache.put(key, result);
-
-        return result;
+        return orderRepository.findByStatusAndAmountNative(status.name(), amount);
     }
 
     public List<Order> getByCustomerName(String name, double amount) {
-        OrderFilter key = new OrderFilter(null, amount);
-
-        if (cache.containsKey(key)) {
-            log.info("FROM CACHE");
-            return cache.get(key);
-        }
-
-        List<Order> result = orderRepository.findByCustomerNameAndAmount(name, amount);
-        cache.put(key, result);
-
-        return result;
+        return orderRepository.findByCustomerNameAndAmount(name, amount);
     }
 
     public List<Order> getByCustomerNameNative(String name, double amount) {
-        OrderFilter key = new OrderFilter(null, amount);
-
-        if (cache.containsKey(key)) {
-            log.info("FROM CACHE");
-            return cache.get(key);
-        }
-
-        List<Order> result = orderRepository.findByCustomerNameAndAmountNative(name, amount);
-        cache.put(key, result);
-
-        return result;
+        return orderRepository.findByCustomerNameAndAmountNative(name, amount);
     }
 
     public Page<Order> getPaged(int page, int size) {
@@ -118,7 +88,7 @@ public class OrderService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "products required");
         }
 
-        List<Product> products = new ArrayList<>();
+        Set<Product> products = new HashSet<>();
 
         for (Long productId : dto.getProductIds()) {
             Product product = productRepository.findById(productId)
