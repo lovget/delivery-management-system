@@ -25,6 +25,7 @@ import java.util.*;
 public class OrderService {
 
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
+    private static final String FROM_CACHE_LOG = "FROM CACHE";
 
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
@@ -53,7 +54,7 @@ public class OrderService {
         OrderFilter key = new OrderFilter(status, null, amount, "status-jpql");
 
         if (cache.containsKey(key)) {
-            log.info("FROM CACHE");
+            log.info(FROM_CACHE_LOG);
             return cache.get(key);
         }
 
@@ -67,7 +68,7 @@ public class OrderService {
         OrderFilter key = new OrderFilter(status, null, amount, "status-native");
 
         if (cache.containsKey(key)) {
-            log.info("FROM CACHE");
+            log.info(FROM_CACHE_LOG);
             return cache.get(key);
         }
 
@@ -83,7 +84,7 @@ public class OrderService {
         OrderFilter key = new OrderFilter(null, name, amount, "customer-jpql");
 
         if (cache.containsKey(key)) {
-            log.info("FROM CACHE");
+            log.info(FROM_CACHE_LOG);
             return cache.get(key);
         }
 
@@ -97,7 +98,7 @@ public class OrderService {
         OrderFilter key = new OrderFilter(null, name, amount, "customer-native");
 
         if (cache.containsKey(key)) {
-            log.info("FROM CACHE");
+            log.info(FROM_CACHE_LOG);
             return cache.get(key);
         }
 
