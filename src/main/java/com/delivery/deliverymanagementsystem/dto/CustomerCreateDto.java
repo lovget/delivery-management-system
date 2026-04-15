@@ -1,18 +1,23 @@
 package com.delivery.deliverymanagementsystem.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+@Schema(description = "DTO for customer creation/update")
 public class CustomerCreateDto {
 
-    @NotBlank
+    @Schema(description = "Customer name", example = "Ivan Ivanov")
+    @NotBlank(message = "Name must not be blank")
     private String name;
 
-    @Email
-    @NotBlank
+    @Schema(description = "Customer email", example = "ivan@example.com")
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email must not be blank")
     private String email;
 
-    @NotBlank
+    @Schema(description = "Customer phone", example = "+79990001122")
+    @NotBlank(message = "Phone must not be blank")
     private String phone;
 
     public String getName() { return name; }

@@ -5,6 +5,8 @@ import com.delivery.deliverymanagementsystem.entity.Order;
 import com.delivery.deliverymanagementsystem.entity.Payment;
 import com.delivery.deliverymanagementsystem.service.OrderService;
 import com.delivery.deliverymanagementsystem.service.PaymentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/payments")
+@Tag(name = "Payments", description = "Payment management endpoints")
 public class PaymentController {
 
     private final PaymentService paymentService;
@@ -25,6 +28,7 @@ public class PaymentController {
     }
 
     @PostMapping
+    @Operation(summary = "Create payment")
     public Payment create(@Valid @RequestBody PaymentCreateDto dto) {
 
         Order order = orderService.getById(dto.getOrderId());
@@ -39,16 +43,19 @@ public class PaymentController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all payments")
     public List<Payment> getAll() {
         return paymentService.getAll();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get payment by id")
     public Payment getById(@PathVariable Long id) {
         return paymentService.getById(id);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete payment")
     public void delete(@PathVariable Long id) {
         paymentService.delete(id);
     }

@@ -2,7 +2,9 @@ package com.delivery.deliverymanagementsystem.service;
 
 import com.delivery.deliverymanagementsystem.entity.Customer;
 import com.delivery.deliverymanagementsystem.repository.CustomerRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -24,11 +26,12 @@ public class CustomerService {
     }
 
     public Customer getById(Long id) {
-        return customerRepository.findById(id).orElseThrow();
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
     }
 
     public Customer update(Long id, Customer customer) {
-        Customer existing = customerRepository.findById(id).orElseThrow();
+        Customer existing = getById(id);
 
         existing.setName(customer.getName());
         existing.setEmail(customer.getEmail());
@@ -38,6 +41,9 @@ public class CustomerService {
     }
 
     public void delete(Long id) {
+        if (!customerRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
+        }
         customerRepository.deleteById(id);
     }
 }

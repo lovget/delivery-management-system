@@ -2,7 +2,9 @@ package com.delivery.deliverymanagementsystem.service;
 
 import com.delivery.deliverymanagementsystem.entity.Category;
 import com.delivery.deliverymanagementsystem.repository.CategoryRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class CategoryService {
 
     public Category getById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
     }
 
     public Category update(Long id, Category updated) {
@@ -35,6 +37,9 @@ public class CategoryService {
     }
 
     public void delete(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+        }
         categoryRepository.deleteById(id);
     }
 }

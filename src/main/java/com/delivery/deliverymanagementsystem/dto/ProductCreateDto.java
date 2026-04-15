@@ -1,18 +1,23 @@
 package com.delivery.deliverymanagementsystem.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 import java.util.List;
 
+@Schema(description = "DTO for product creation")
 public class ProductCreateDto {
 
-    @NotBlank
+    @Schema(description = "Product name", example = "Cheeseburger")
+    @NotBlank(message = "Product name must not be blank")
     private String name;
 
-    @Positive
+    @Schema(description = "Product price", example = "250")
+    @Positive(message = "Price must be greater than 0")
     private double price;
 
+    @Schema(description = "List of existing category ids", example = "[1,2]")
     private List<Long> categoryIds;
 
     public String getName() { return name; }

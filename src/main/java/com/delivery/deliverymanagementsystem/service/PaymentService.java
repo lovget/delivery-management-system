@@ -2,7 +2,9 @@ package com.delivery.deliverymanagementsystem.service;
 
 import com.delivery.deliverymanagementsystem.entity.Payment;
 import com.delivery.deliverymanagementsystem.repository.PaymentRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class PaymentService {
 
     public Payment getById(Long id) {
         return paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Payment not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));
     }
 
     public Payment update(Long id, Payment updated) {
@@ -36,6 +38,9 @@ public class PaymentService {
     }
 
     public void delete(Long id) {
+        if (!paymentRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found");
+        }
         paymentRepository.deleteById(id);
     }
 }
