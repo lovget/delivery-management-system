@@ -25,15 +25,19 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByStatusAndAmount(@Param("status") OrderStatus status,
                                       @Param("amount") double amount);
 
-    @Query(value = "SELECT DISTINCT o.* FROM orders o " +
+    @Query(value = "SELECT o.id, o.status, o.total_amount, " +
+            "c.id, c.name, c.email, c.phone, " +
+            "p.id, p.name, p.price, " +
+            "ca.id, ca.name " +
+            "FROM orders o " +
             "JOIN customers c ON c.id = o.customer_id " +
             "JOIN order_products op ON o.id = op.order_id " +
             "JOIN products p ON p.id = op.product_id " +
             "LEFT JOIN product_categories pc ON pc.product_id = p.id " +
             "LEFT JOIN categories ca ON ca.id = pc.category_id " +
             "WHERE o.status = :status AND o.total_amount > :amount", nativeQuery = true)
-    List<Order> findByStatusAndAmountNative(@Param("status") String status,
-                                            @Param("amount") double amount);
+    List<Object[]> findByStatusAndAmountNativeRaw(@Param("status") String status,
+                                                  @Param("amount") double amount);
 
     @Query("SELECT DISTINCT o FROM Order o " +
             "JOIN FETCH o.customer c " +
@@ -43,7 +47,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByCustomerNameAndAmount(@Param("name") String name,
                                             @Param("amount") double amount);
 
-    @Query(value = "SELECT DISTINCT o.* FROM orders o " +
+    @Query(value = "SELECT o.id, o.status, o.total_amount, " +
+            "c.id, c.name, c.email, c.phone, " +
+            "p.id, p.name, p.price, " +
+            "ca.id, ca.name " +
+            "FROM orders o " +
             "JOIN customers c ON o.customer_id = c.id " +
             "JOIN order_products op ON o.id = op.order_id " +
             "JOIN products p ON p.id = op.product_id " +
@@ -51,8 +59,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "LEFT JOIN categories ca ON ca.id = pc.category_id " +
             "WHERE c.name = :name AND o.total_amount > :amount",
             nativeQuery = true)
-    List<Order> findByCustomerNameAndAmountNative(@Param("name") String name,
-                                                  @Param("amount") double amount);
+    List<Object[]> findByCustomerNameAndAmountNativeRaw(@Param("name") String name,
+                                                        @Param("amount") double amount);
 
     Page<Order> findAll(Pageable pageable);
 }

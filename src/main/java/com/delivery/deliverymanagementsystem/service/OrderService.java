@@ -2,6 +2,7 @@ package com.delivery.deliverymanagementsystem.service;
 
 import com.delivery.deliverymanagementsystem.dto.OrderCreateDto;
 import com.delivery.deliverymanagementsystem.dto.OrderFilter;
+import com.delivery.deliverymanagementsystem.entity.Category;
 import com.delivery.deliverymanagementsystem.entity.Customer;
 import com.delivery.deliverymanagementsystem.entity.Order;
 import com.delivery.deliverymanagementsystem.entity.OrderStatus;
@@ -70,7 +71,9 @@ public class OrderService {
             return cache.get(key);
         }
 
-        List<Order> result = orderRepository.findByStatusAndAmountNative(status.name(), amount);
+        List<Order> result = mapNativeRowsToOrders(
+                orderRepository.findByStatusAndAmountNativeRaw(status.name(), amount)
+        );
         cache.put(key, result);
 
         return result;
@@ -98,7 +101,9 @@ public class OrderService {
             return cache.get(key);
         }
 
-        List<Order> result = orderRepository.findByCustomerNameAndAmountNative(name, amount);
+        List<Order> result = mapNativeRowsToOrders(
+                orderRepository.findByCustomerNameAndAmountNativeRaw(name, amount)
+        );
         cache.put(key, result);
 
         return result;
@@ -167,5 +172,61 @@ public class OrderService {
         orderRepository.deleteById(id);
 
         cache.clear();
+    }
+
+    private List<Order> mapNativeRowsToOrders(List<Object[]> rows) {
+        Map<Long, Order> orders = new LinkedHashMap<>();
+        Map<Long, Map<Long, Product>> orderProducts = new HashMap<>();
+
+        for (Object[] row : rows) {
+            Long orderId = ((Number) row[0]).longValue();
+            Order order = orders.get(orderId);
+
+            if (order == null) {
+                order = new Order();
+                order.setId(orderId);
+                order.setStatus(OrderStatus.valueOf((String) row[1]));
+                order.setTotalAmount(((Number) row[2]).doubleValue());
+                order.setProducts(new HashSet<>());
+
+                Customer customer = new Customer();
+                customer.setId(((Number) row[3]).longValue());
+                customer.setName((String) row[4]);
+                customer.setEmail((String) row[5]);
+                customer.setPhone((String) row[6]);
+                order.setCustomer(customer);
+
+                orders.put(orderId, order);
+            }
+
+            Long productId = ((Number) row[7]).longValue();
+            Map<Long, Product> products = orderProducts.computeIfAbsent(orderId, id -> new LinkedHashMap<>());
+            Product product = products.get(productId);
+
+            if (product == null) {
+                product = new Product();
+                product.setId(productId);
+                product.setName((String) row[8]);
+                product.setPrice(((Number) row[9]).doubleValue());
+                product.setCategories(new HashSet<>());
+                products.put(productId, product);
+                order.getProducts().add(product);
+            }
+
+            if (row[10] != null) {
+                Long categoryId = ((Number) row[10]).longValue();
+                boolean exists = product.getCategories().stream()
+                        .anyMatch(category -> category.getId().equals(categoryId));
+
+                if (!exists) {
+                    Category category = new Category();
+                    category.setId(categoryId);
+                    category.setName((String) row[11]);
+                    product.getCategories().add(category);
+                }
+            }
+        }
+
+        return new ArrayList<>(orders.values());
     }
 }
