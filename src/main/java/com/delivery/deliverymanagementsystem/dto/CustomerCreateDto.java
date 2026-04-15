@@ -1,8 +1,18 @@
 package com.delivery.deliverymanagementsystem.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class CustomerCreateDto {
+
+    @NotBlank
     private String name;
+
+    @Email
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String phone;
 
     public String getName() { return name; }

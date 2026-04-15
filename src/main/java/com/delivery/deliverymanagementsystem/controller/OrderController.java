@@ -4,6 +4,7 @@ import com.delivery.deliverymanagementsystem.dto.OrderCreateDto;
 import com.delivery.deliverymanagementsystem.entity.Order;
 import com.delivery.deliverymanagementsystem.entity.OrderStatus;
 import com.delivery.deliverymanagementsystem.service.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,7 +61,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order create(@RequestBody OrderCreateDto dto) {
+    public Order create(@Valid @RequestBody OrderCreateDto dto) {
         return orderService.createOrder(dto);
     }
 

@@ -3,6 +3,7 @@ package com.delivery.deliverymanagementsystem.controller;
 import com.delivery.deliverymanagementsystem.dto.CustomerCreateDto;
 import com.delivery.deliverymanagementsystem.entity.Customer;
 import com.delivery.deliverymanagementsystem.service.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer create(@RequestBody CustomerCreateDto dto) {
+    public Customer create(@Valid @RequestBody CustomerCreateDto dto) {
         Customer customer = new Customer();
         customer.setName(dto.getName());
         customer.setEmail(dto.getEmail());
@@ -37,7 +38,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public Customer update(@PathVariable Long id, @RequestBody CustomerCreateDto dto) {
+    public Customer update(@PathVariable Long id, @Valid @RequestBody CustomerCreateDto dto) {
         Customer customer = new Customer();
         customer.setName(dto.getName());
         customer.setEmail(dto.getEmail());

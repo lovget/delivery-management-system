@@ -3,6 +3,7 @@ package com.delivery.deliverymanagementsystem.controller;
 import com.delivery.deliverymanagementsystem.dto.ProductCreateDto;
 import com.delivery.deliverymanagementsystem.entity.Product;
 import com.delivery.deliverymanagementsystem.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product create(@RequestBody ProductCreateDto dto) {
+    public Product create(@Valid @RequestBody ProductCreateDto dto) {
         return productService.create(dto);
     }
 

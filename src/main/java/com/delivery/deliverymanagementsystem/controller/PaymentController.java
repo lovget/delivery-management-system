@@ -5,6 +5,7 @@ import com.delivery.deliverymanagementsystem.entity.Order;
 import com.delivery.deliverymanagementsystem.entity.Payment;
 import com.delivery.deliverymanagementsystem.service.OrderService;
 import com.delivery.deliverymanagementsystem.service.PaymentService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class PaymentController {
     }
 
     @PostMapping
-    public Payment create(@RequestBody PaymentCreateDto dto) {
+    public Payment create(@Valid @RequestBody PaymentCreateDto dto) {
 
         Order order = orderService.getById(dto.getOrderId());
 

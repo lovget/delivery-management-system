@@ -1,12 +1,19 @@
 package com.delivery.deliverymanagementsystem.dto;
 
 import com.delivery.deliverymanagementsystem.entity.OrderStatus;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 public class OrderCreateDto {
 
+    @NotNull
     private Long customerId;
+
+    @NotEmpty
     private List<Long> productIds;
+
     private OrderStatus status;
 
     public Long getCustomerId() { return customerId; }
