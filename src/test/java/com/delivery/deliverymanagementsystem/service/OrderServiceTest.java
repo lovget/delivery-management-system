@@ -8,7 +8,6 @@ import com.delivery.deliverymanagementsystem.entity.Product;
 import com.delivery.deliverymanagementsystem.repository.CustomerRepository;
 import com.delivery.deliverymanagementsystem.repository.OrderRepository;
 import com.delivery.deliverymanagementsystem.repository.ProductRepository;
-import com.delivery.deliverymanagementsystem.service.OrderService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -93,17 +92,20 @@ class OrderServiceTest {
         when(productRepository.findById(999L)).thenReturn(Optional.empty());
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
+        List<OrderCreateDto> dtos = List.of(firstDto, secondDto);
+
         assertThrows(ResponseStatusException.class,
-                () -> orderService.createOrdersBulkNonTransactional(List.of(firstDto, secondDto)));
+                () -> orderService.createOrdersBulkNonTransactional(dtos));
 
         verify(orderRepository, times(1)).save(any(Order.class));
     }
 
-
     @Test
     void createOrdersBulkTransactional_shouldFailWhenListIsEmpty() {
+        List<OrderCreateDto> dtos = List.of();
+
         assertThrows(ResponseStatusException.class,
-                () -> orderService.createOrdersBulkTransactional(List.of()));
+                () -> orderService.createOrdersBulkTransactional(dtos));
     }
 
     @Test
@@ -132,7 +134,8 @@ class OrderServiceTest {
         when(productRepository.findById(20L)).thenReturn(Optional.of(second));
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        List<Order> result = orderService.createOrdersBulkTransactional(List.of(firstDto, secondDto));
+        List<OrderCreateDto> dtos = List.of(firstDto, secondDto);
+        List<Order> result = orderService.createOrdersBulkTransactional(dtos);
 
         assertEquals(2, result.size());
 
