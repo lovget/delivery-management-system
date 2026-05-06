@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -22,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Transactional
 class OrderServiceIntegrationTest {
 
     @Autowired
@@ -68,10 +66,12 @@ class OrderServiceIntegrationTest {
         second.setCustomerId(customerId);
         second.setProductIds(List.of(999_999L));
 
+        long before = orderRepository.count();
+
         assertThrows(ResponseStatusException.class,
                 () -> orderService.createOrdersBulkTransactional(List.of(first, second)));
 
-        assertEquals(0, orderRepository.count());
+        assertEquals(before, orderRepository.count());
     }
 
     @Test
@@ -84,10 +84,12 @@ class OrderServiceIntegrationTest {
         second.setCustomerId(customerId);
         second.setProductIds(List.of(999_999L));
 
+        long before = orderRepository.count();
+
         assertThrows(ResponseStatusException.class,
                 () -> orderService.createOrdersBulkNonTransactional(List.of(first, second)));
 
-        assertEquals(1, orderRepository.count());
+        assertEquals(before + 1, orderRepository.count());
         Order savedOrder = orderRepository.findAll().get(0);
         assertEquals(99.0, savedOrder.getTotalAmount());
     }
