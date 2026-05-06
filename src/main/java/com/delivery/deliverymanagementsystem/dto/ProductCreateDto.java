@@ -6,18 +6,18 @@ import jakarta.validation.constraints.Positive;
 
 import java.util.List;
 
-@Schema(description = "DTO for product creation")
+@Schema(description = "DTO для создания товара")
 public class ProductCreateDto {
 
-    @Schema(description = "Product name", example = "Cheeseburger")
-    @NotBlank(message = "Product name must not be blank")
+    @Schema(description = "Название товара", example = "Cheeseburger")
+    @NotBlank(message = "Название товара must not be blank")
     private String name;
 
-    @Schema(description = "Product price", example = "250")
+    @Schema(description = "Цена товара", example = "250")
     @Positive(message = "Price must be greater than 0")
     private double price;
 
-    @Schema(description = "List of existing category ids", example = "[1,2]")
+    @Schema(description = "Список идентификаторов существующих категорий", example = "[1,2]")
     private List<Long> categoryIds;
 
     public String getName() { return name; }

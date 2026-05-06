@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
-@Tag(name = "Categories", description = "Category management endpoints")
+@Tag(name = "Categories", description = "Операции с категориями")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -22,7 +22,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    @Operation(summary = "Create category")
+    @Operation(summary = "Создать категорию")
     public Category create(@Valid @RequestBody CategoryDto dto) {
         Category category = new Category();
         category.setName(dto.getName());
@@ -30,19 +30,19 @@ public class CategoryController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all categories")
+    @Operation(summary = "Получить список категорий")
     public List<Category> getAll() {
         return categoryService.getAll();
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get category by id")
+    @Operation(summary = "Получить категорию по id")
     public Category getById(@PathVariable Long id) {
         return categoryService.getById(id);
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update category")
+    @Operation(summary = "Обновить категорию")
     public Category update(@PathVariable Long id, @Valid @RequestBody CategoryDto dto) {
         Category category = new Category();
         category.setName(dto.getName());
@@ -50,7 +50,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete category")
+    @Operation(summary = "Удалить категорию")
     public void delete(@PathVariable Long id) {
         categoryService.delete(id);
     }

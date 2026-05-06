@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
-@Tag(name = "Orders", description = "Order management endpoints")
+@Tag(name = "Orders", description = "Операции с заказами")
 public class OrderController {
 
     private final OrderService orderService;
@@ -24,67 +24,67 @@ public class OrderController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all orders")
+    @Operation(summary = "Получить все заказы")
     public List<Order> getAll() {
         return orderService.getAll();
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get order by id")
+    @Operation(summary = "Получить заказ по id")
     public Order getById(@PathVariable Long id) {
         return orderService.getById(id);
     }
 
     @GetMapping("/filter")
-    @Operation(summary = "Filter orders by status and minimum amount")
+    @Operation(summary = "Фильтр заказов по статусу и минимальной сумме")
     public List<Order> filter(@RequestParam OrderStatus status,
                               @RequestParam double amount) {
         return orderService.getFiltered(status, amount);
     }
 
     @GetMapping("/filter/native")
-    @Operation(summary = "Filter orders by status and minimum amount (native SQL)")
+    @Operation(summary = "Фильтр заказов по статусу и минимальной сумме (native SQL)")
     public List<Order> filterNative(@RequestParam OrderStatus status,
                                     @RequestParam double amount) {
         return orderService.getFilteredNative(status, amount);
     }
 
     @GetMapping("/filter/by-customer")
-    @Operation(summary = "Filter orders by customer name and minimum amount")
+    @Operation(summary = "Фильтр заказов по имени клиента и минимальной сумме")
     public List<Order> filterByCustomer(@RequestParam String name,
                                         @RequestParam double amount) {
         return orderService.getByCustomerName(name, amount);
     }
 
     @GetMapping("/filter/by-customer/native")
-    @Operation(summary = "Filter orders by customer name and minimum amount (native SQL)")
+    @Operation(summary = "Фильтр заказов по имени клиента и минимальной сумме (native SQL)")
     public List<Order> filterByCustomerNative(@RequestParam String name,
                                               @RequestParam double amount) {
         return orderService.getByCustomerNameNative(name, amount);
     }
 
     @GetMapping("/page")
-    @Operation(summary = "Get paginated orders")
+    @Operation(summary = "Получить заказы постранично")
     public Page<Order> page(@RequestParam int page,
                             @RequestParam int size) {
         return orderService.getPaged(page, size);
     }
 
     @PostMapping
-    @Operation(summary = "Create order")
+    @Operation(summary = "Создать заказ")
     public Order create(@Valid @RequestBody OrderCreateDto dto) {
         return orderService.createOrder(dto);
     }
 
     @PatchMapping("/{id}/status")
-    @Operation(summary = "Update order status")
+    @Operation(summary = "Обновить статус заказа")
     public Order updateStatus(@PathVariable Long id,
                               @RequestParam OrderStatus status) {
         return orderService.updateStatus(id, status);
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete order")
+    @Operation(summary = "Удалить заказ")
     public void delete(@PathVariable Long id) {
         orderService.delete(id);
     }

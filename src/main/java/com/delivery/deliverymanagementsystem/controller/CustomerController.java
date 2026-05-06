@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
-@Tag(name = "Customers", description = "Customer management endpoints")
+@Tag(name = "Customers", description = "Операции с клиентами")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -22,7 +22,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    @Operation(summary = "Create customer")
+    @Operation(summary = "Создать клиента")
     public Customer create(@Valid @RequestBody CustomerCreateDto dto) {
         Customer customer = new Customer();
         customer.setName(dto.getName());
@@ -32,19 +32,19 @@ public class CustomerController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all customers")
+    @Operation(summary = "Получить список клиентов")
     public List<Customer> getAll() {
         return customerService.getAll();
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get customer by id")
+    @Operation(summary = "Получить клиента по id")
     public Customer getById(@PathVariable Long id) {
         return customerService.getById(id);
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update customer")
+    @Operation(summary = "Обновить клиента")
     public Customer update(@PathVariable Long id, @Valid @RequestBody CustomerCreateDto dto) {
         Customer customer = new Customer();
         customer.setName(dto.getName());
@@ -54,7 +54,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete customer")
+    @Operation(summary = "Удалить клиента")
     public void delete(@PathVariable Long id) {
         customerService.delete(id);
     }

@@ -4,19 +4,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-@Schema(description = "DTO for customer creation/update")
+@Schema(description = "DTO для создания/обновления клиента")
 public class CustomerCreateDto {
 
-    @Schema(description = "Customer name", example = "Ivan Ivanov")
+    @Schema(description = "Имя клиента", example = "Ivan Ivanov")
     @NotBlank(message = "Name must not be blank")
     private String name;
 
-    @Schema(description = "Customer email", example = "ivan@example.com")
+    @Schema(description = "Email клиента", example = "ivan@example.com")
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email must not be blank")
     private String email;
 
-    @Schema(description = "Customer phone", example = "+79990001122")
+    @Schema(description = "Телефон клиента", example = "+79990001122")
     @NotBlank(message = "Phone must not be blank")
     private String phone;
 

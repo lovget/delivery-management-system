@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
-@Tag(name = "Products", description = "Product management endpoints")
+@Tag(name = "Products", description = "Операции с товарами")
 public class ProductController {
 
     private final ProductService productService;
@@ -22,25 +22,25 @@ public class ProductController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all products")
+    @Operation(summary = "Получить список товаров")
     public List<Product> getAll() {
         return productService.getAll();
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get product by id")
+    @Operation(summary = "Получить товар по id")
     public Product getById(@PathVariable Long id) {
         return productService.getById(id);
     }
 
     @PostMapping
-    @Operation(summary = "Create product")
+    @Operation(summary = "Создать товар")
     public Product create(@Valid @RequestBody ProductCreateDto dto) {
         return productService.create(dto);
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete product")
+    @Operation(summary = "Удалить товар")
     public void delete(@PathVariable Long id) {
         productService.delete(id);
     }

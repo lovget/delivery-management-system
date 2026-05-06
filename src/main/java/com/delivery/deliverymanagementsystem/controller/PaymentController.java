@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/payments")
-@Tag(name = "Payments", description = "Payment management endpoints")
+@Tag(name = "Payments", description = "Операции с платежами")
 public class PaymentController {
 
     private final PaymentService paymentService;
@@ -28,7 +28,7 @@ public class PaymentController {
     }
 
     @PostMapping
-    @Operation(summary = "Create payment")
+    @Operation(summary = "Создать платеж")
     public Payment create(@Valid @RequestBody PaymentCreateDto dto) {
 
         Order order = orderService.getById(dto.getOrderId());
@@ -43,19 +43,19 @@ public class PaymentController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all payments")
+    @Operation(summary = "Получить список платежей")
     public List<Payment> getAll() {
         return paymentService.getAll();
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get payment by id")
+    @Operation(summary = "Получить платеж по id")
     public Payment getById(@PathVariable Long id) {
         return paymentService.getById(id);
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete payment")
+    @Operation(summary = "Удалить платеж")
     public void delete(@PathVariable Long id) {
         paymentService.delete(id);
     }

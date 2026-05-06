@@ -7,18 +7,18 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-@Schema(description = "DTO for order creation")
+@Schema(description = "DTO для создания заказа")
 public class OrderCreateDto {
 
-    @Schema(description = "Existing customer id", example = "1")
+    @Schema(description = "Идентификатор существующего клиента", example = "1")
     @NotNull(message = "Customer id is required")
     private Long customerId;
 
-    @Schema(description = "List of existing product ids", example = "[1,2]")
+    @Schema(description = "Список идентификаторов существующих товаров", example = "[1,2]")
     @NotEmpty(message = "At least one product id is required")
     private List<Long> productIds;
 
-    @Schema(description = "Order status. If omitted, NEW is used", example = "NEW")
+    @Schema(description = "Статус заказа (если не передан, будет NEW)", example = "NEW")
     private OrderStatus status;
 
     public Long getCustomerId() { return customerId; }
