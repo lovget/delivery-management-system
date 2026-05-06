@@ -19,7 +19,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -116,39 +124,33 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(OrderCreateDto dto) {
+        Order saved = orderRepository.save(buildOrder(dto));
+        cache.clear();
+        return saved;
+    }
 
-        Customer customer = customerRepository.findById(dto.getCustomerId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
+    @Transactional
+    public List<Order> createOrdersBulkTransactional(List<OrderCreateDto> dtos) {
+        return createOrdersBulk(dtos);
+    }
 
-        if (dto.getProductIds() == null || dto.getProductIds().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "products required");
-        }
+    public List<Order> createOrdersBulkNonTransactional(List<OrderCreateDto> dtos) {
+        return createOrdersBulk(dtos);
+    }
 
-        Set<Product> products = new HashSet<>();
 
-        for (Long productId : dto.getProductIds()) {
-            Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found: " + productId));
-            products.add(product);
-        }
+    private List<Order> createOrdersBulk(List<OrderCreateDto> dtos) {
+        List<OrderCreateDto> safeDtos = Optional.ofNullable(dtos)
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "orders required"));
 
-        Order order = new Order();
-        order.setCustomer(customer);
-        order.setProducts(products);
-        order.setStatus(dto.getStatus() != null ? dto.getStatus() : OrderStatus.NEW);
-
-        double total = 0;
-        for (Product p : products) {
-            total += p.getPrice();
-        }
-
-        order.setTotalAmount(total);
-
-        Order saved = orderRepository.save(order);
+        List<Order> savedOrders = safeDtos.stream()
+                .map(this::buildOrder)
+                .map(orderRepository::save)
+                .collect(Collectors.toList());
 
         cache.clear();
-
-        return saved;
+        return savedOrders;
     }
 
     @Transactional
@@ -173,6 +175,35 @@ public class OrderService {
         orderRepository.deleteById(id);
 
         cache.clear();
+    }
+
+    private Order buildOrder(OrderCreateDto dto) {
+        Customer customer = customerRepository.findById(dto.getCustomerId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
+
+        List<Long> productIds = Optional.ofNullable(dto.getProductIds())
+                .filter(ids -> !ids.isEmpty())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "products required"));
+
+        Set<Product> products = productIds.stream()
+                .map(productId -> productRepository.findById(productId)
+                        .orElseThrow(() -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Product not found: " + productId
+                        )))
+                .collect(Collectors.toCollection(HashSet::new));
+
+        Order order = new Order();
+        order.setCustomer(customer);
+        order.setProducts(products);
+        order.setStatus(Optional.ofNullable(dto.getStatus()).orElse(OrderStatus.NEW));
+
+        double total = products.stream()
+                .mapToDouble(Product::getPrice)
+                .sum();
+        order.setTotalAmount(total);
+
+        return order;
     }
 
     private List<Order> mapNativeRowsToOrders(List<Object[]> rows) {

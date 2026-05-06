@@ -76,6 +76,18 @@ public class OrderController {
         return orderService.createOrder(dto);
     }
 
+
+    @PostMapping("/bulk")
+    @Operation(summary = "Массовое создание заказов")
+    public List<Order> createBulk(@Valid @RequestBody List<OrderCreateDto> dtos,
+                                  @RequestParam(defaultValue = "true") boolean transactional) {
+        if (transactional) {
+            return orderService.createOrdersBulkTransactional(dtos);
+        }
+
+        return orderService.createOrdersBulkNonTransactional(dtos);
+    }
+
     @PatchMapping("/{id}/status")
     @Operation(summary = "Обновить статус заказа")
     public Order updateStatus(@PathVariable Long id,
