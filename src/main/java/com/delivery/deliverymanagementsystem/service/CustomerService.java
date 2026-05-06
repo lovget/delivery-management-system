@@ -18,6 +18,9 @@ public class CustomerService {
     }
 
     public Customer create(Customer customer) {
+        if (customerRepository.existsByEmailIgnoreCase(customer.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Customer with this email already exists");
+        }
         return customerRepository.save(customer);
     }
 
@@ -32,6 +35,10 @@ public class CustomerService {
 
     public Customer update(Long id, Customer customer) {
         Customer existing = getById(id);
+
+        if (customerRepository.existsByEmailIgnoreCaseAndIdNot(customer.getEmail(), id)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Customer with this email already exists");
+        }
 
         existing.setName(customer.getName());
         existing.setEmail(customer.getEmail());

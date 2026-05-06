@@ -21,7 +21,9 @@ public class LoggingAspect {
             return joinPoint.proceed();
         } finally {
             long executionTime = System.currentTimeMillis() - start;
-            log.info("{} executed in {} ms", joinPoint.getSignature().toShortString(), executionTime);
+            if (log.isInfoEnabled()) {
+                log.info("{} executed in {} ms", joinPoint.getSignature().toShortString(), executionTime);
+            }
         }
     }
 }
