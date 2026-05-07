@@ -2,6 +2,8 @@ package com.delivery.deliverymanagementsystem.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,6 +18,8 @@ import java.util.List;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(
@@ -35,6 +39,9 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 details
         );
+
+        log.warn("Business validation error: method={} path={} status={} details={}",
+                request.getMethod(), request.getRequestURI(), HttpStatus.BAD_REQUEST.value(), details);
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -56,6 +63,9 @@ public class GlobalExceptionHandler {
                 details
         );
 
+        log.warn("Business constraint violation: method={} path={} status={} details={}",
+                request.getMethod(), request.getRequestURI(), HttpStatus.BAD_REQUEST.value(), details);
+
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
@@ -70,6 +80,9 @@ public class GlobalExceptionHandler {
                 "Malformed JSON request",
                 request.getRequestURI()
         );
+
+        log.warn("Malformed request body: method={} path={} status={} message={}",
+                request.getMethod(), request.getRequestURI(), HttpStatus.BAD_REQUEST.value(), ex.getMostSpecificCause().getMessage());
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -86,6 +99,14 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
 
+        if (ex.getStatusCode().is4xxClientError()) {
+            log.warn("Business response error: method={} path={} status={} reason={}",
+                    request.getMethod(), request.getRequestURI(), ex.getStatusCode().value(), ex.getReason());
+        } else {
+            log.error("Response status exception: method={} path={} status={} reason={}",
+                    request.getMethod(), request.getRequestURI(), ex.getStatusCode().value(), ex.getReason(), ex);
+        }
+
         return new ResponseEntity<>(error, ex.getStatusCode());
     }
 
@@ -100,6 +121,9 @@ public class GlobalExceptionHandler {
                 "Unexpected server error",
                 request.getRequestURI()
         );
+
+        log.error("Unexpected server error: method={} path={} status={}",
+                request.getMethod(), request.getRequestURI(), HttpStatus.INTERNAL_SERVER_ERROR.value(), ex);
 
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
