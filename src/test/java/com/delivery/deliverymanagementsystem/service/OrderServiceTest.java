@@ -147,9 +147,8 @@ class OrderServiceTest {
 
     @Test
     void getByCustomerNameNative_mapsRowsAndCaches() {
-        List<Object[]> rows = List.of(
-                new Object[]{2L, "PAID", 50.0, 1L, "Alice", "alice@mail.com", "123", 20L, "Fries", 50.0, null, null}
-        );
+        Object[] row = new Object[]{2L, "PROCESSING", 50.0, 1L, "Alice", "alice@mail.com", "123", 20L, "Fries", 50.0, null, null};
+        List<Object[]> rows = java.util.Collections.singletonList(row);
         when(orderRepository.findByCustomerNameAndAmountNativeRaw("Alice", 40.0)).thenReturn(rows);
 
         List<Order> first = orderService.getByCustomerNameNative("Alice", 40.0);
@@ -213,8 +212,8 @@ class OrderServiceTest {
 
     @Test
     void bulkTransactional_savesAllForValidInput() {
-        OrderCreateDto firstDto = validDto(List.of(10L), OrderStatus.PAID);
-        OrderCreateDto secondDto = validDto(List.of(20L), OrderStatus.CANCELLED);
+        OrderCreateDto firstDto = validDto(List.of(10L), OrderStatus.PROCESSING);
+        OrderCreateDto secondDto = validDto(List.of(20L), OrderStatus.DONE);
 
         when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
         when(productRepository.findById(10L)).thenReturn(Optional.of(firstProduct));
@@ -224,8 +223,8 @@ class OrderServiceTest {
         List<Order> result = orderService.createOrdersBulkTransactional(List.of(firstDto, secondDto));
 
         assertEquals(2, result.size());
-        assertEquals(OrderStatus.PAID, result.get(0).getStatus());
-        assertEquals(OrderStatus.CANCELLED, result.get(1).getStatus());
+        assertEquals(OrderStatus.PROCESSING, result.get(0).getStatus());
+        assertEquals(OrderStatus.DONE, result.get(1).getStatus());
     }
 
     @Test
@@ -236,15 +235,15 @@ class OrderServiceTest {
         when(orderRepository.findById(7L)).thenReturn(Optional.of(order));
         when(orderRepository.save(order)).thenReturn(order);
 
-        Order updated = orderService.updateStatus(7L, OrderStatus.PAID);
+        Order updated = orderService.updateStatus(7L, OrderStatus.PROCESSING);
 
-        assertEquals(OrderStatus.PAID, updated.getStatus());
+        assertEquals(OrderStatus.PROCESSING, updated.getStatus());
     }
 
     @Test
     void updateStatus_throwsWhenMissing() {
         when(orderRepository.findById(7L)).thenReturn(Optional.empty());
-        assertThrows(ResponseStatusException.class, () -> orderService.updateStatus(7L, OrderStatus.PAID));
+        assertThrows(ResponseStatusException.class, () -> orderService.updateStatus(7L, OrderStatus.PROCESSING));
     }
 
     @Test
@@ -304,14 +303,14 @@ class OrderServiceTest {
 
     @Test
     void createOrder_usesExplicitStatusWhenProvided() {
-        OrderCreateDto dto = validDto(List.of(10L), OrderStatus.PAID);
+        OrderCreateDto dto = validDto(List.of(10L), OrderStatus.PROCESSING);
         when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
         when(productRepository.findById(10L)).thenReturn(Optional.of(firstProduct));
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Order order = orderService.createOrder(dto);
 
-        assertEquals(OrderStatus.PAID, order.getStatus());
+        assertEquals(OrderStatus.PROCESSING, order.getStatus());
     }
 
     private OrderCreateDto validDto(List<Long> productIds, OrderStatus status) {
