@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -49,7 +50,7 @@ class PaymentServiceTest {
     @Test
     void getById_shouldReturnPayment() {
         Payment payment = new Payment();
-        payment.setId(4L);
+        ReflectionTestUtils.setField(payment, "id", 4L);
 
         when(paymentRepository.findById(4L)).thenReturn(Optional.of(payment));
 
@@ -66,7 +67,7 @@ class PaymentServiceTest {
     @Test
     void update_shouldApplyFieldsAndSave() {
         Payment existing = new Payment();
-        existing.setId(9L);
+        ReflectionTestUtils.setField(existing, "id", 9L);
         existing.setMethod("CASH");
 
         Payment updated = new Payment();
