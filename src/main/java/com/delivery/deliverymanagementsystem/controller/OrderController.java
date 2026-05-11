@@ -5,6 +5,7 @@ import com.delivery.deliverymanagementsystem.entity.Order;
 import com.delivery.deliverymanagementsystem.entity.OrderStatus;
 import com.delivery.deliverymanagementsystem.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -79,7 +80,16 @@ public class OrderController {
 
     @PostMapping("/bulk")
     @Operation(summary = "Массовое создание заказов")
+    @Operation(
+            summary = "Массовое создание заказов",
+            description = """
+                    Создает несколько заказов одним запросом (bulk).
+                    transactional=true (по умолчанию): одна транзакция на весь список, при ошибке откатятся все изменения.
+                    transactional=false: каждый элемент сохраняется отдельно, поэтому при ошибке часть заказов может остаться в базе.
+                    """
+    )
     public List<Order> createBulk(@Valid @RequestBody List<OrderCreateDto> dtos,
+                                  @Parameter(description = "true — все-or-nothing с откатом; false — частичное сохранение возможно")
                                   @RequestParam(defaultValue = "true") boolean transactional) {
         if (transactional) {
             return orderService.createOrdersBulkTransactional(dtos);
@@ -100,4 +110,5 @@ public class OrderController {
     public void delete(@PathVariable Long id) {
         orderService.delete(id);
     }
+}
 }
