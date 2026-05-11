@@ -79,14 +79,13 @@ public class OrderController {
 
 
     @PostMapping("/bulk")
-    @Operation(summary = "Массовое создание заказов")
     @Operation(
             summary = "Массовое создание заказов",
-            description = """
-                    Создает несколько заказов одним запросом (bulk).
-                    transactional=true (по умолчанию): одна транзакция на весь список, при ошибке откатятся все изменения.
-                    transactional=false: каждый элемент сохраняется отдельно, поэтому при ошибке часть заказов может остаться в базе.
-                    """
+            description = "Создает несколько заказов одним запросом (bulk). "
+                    + "transactional=true (по умолчанию): одна транзакция на весь список, "
+                    + "при ошибке откатятся все изменения. "
+                    + "transactional=false: каждый элемент сохраняется отдельно, "
+                    + "поэтому при ошибке часть заказов может остаться в базе."
     )
     public List<Order> createBulk(@Valid @RequestBody List<OrderCreateDto> dtos,
                                   @Parameter(description = "true — все-or-nothing с откатом; false — частичное сохранение возможно")
@@ -110,5 +109,4 @@ public class OrderController {
     public void delete(@PathVariable Long id) {
         orderService.delete(id);
     }
-}
 }
