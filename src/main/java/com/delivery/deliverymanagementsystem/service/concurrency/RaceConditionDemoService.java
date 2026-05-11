@@ -52,11 +52,15 @@ public class RaceConditionDemoService {
         }
 
         try {
-            latch.await(20, TimeUnit.SECONDS);
+            boolean completed = latch.await(20, TimeUnit.SECONDS);
+            if (!completed) {
+                throw new IllegalStateException("Race condition demo timed out");
+            }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            throw new IllegalStateException("Race condition demo interrupted", e);
         } finally {
-            executor.shutdown();
+            executor.shutdownNow();
         }
     }
 }
