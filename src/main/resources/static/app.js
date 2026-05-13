@@ -1,10 +1,45 @@
 const { useEffect, useState } = React;
 
+const parseError = async (response, fallbackMessage) => {
+    try {
+        const payload = await response.json();
+        return new Error(payload.message || fallbackMessage);
+    } catch {
+        return new Error(fallbackMessage);
+    }
+};
+
 const api = {
-    get: (url) => fetch(url).then(r => r.ok ? r.json() : r.json().then(e => Promise.reject(e))),
-    send: (url, method, body) => fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined })
-        .then(r => r.ok ? (r.status === 204 ? null : r.json()) : r.json().then(e => Promise.reject(e))),
-    del: (url) => fetch(url, { method: 'DELETE' }).then(r => { if (!r.ok) return Promise.reject(); })
+    get: async (url) => {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw await parseError(response, 'Ошибка GET запроса');
+        }
+        return response.json();
+    },
+    send: async (url, method, body) => {
+        const response = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: body ? JSON.stringify(body) : undefined
+        });
+
+        if (!response.ok) {
+            throw await parseError(response, 'Ошибка запроса');
+        }
+
+        if (response.status === 204) {
+            return null;
+        }
+
+        return response.json();
+    },
+    del: async (url) => {
+        const response = await fetch(url, { method: 'DELETE' });
+        if (!response.ok) {
+            throw await parseError(response, 'Ошибка удаления');
+        }
+    }
 };
 
 function App() {
