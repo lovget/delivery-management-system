@@ -4,6 +4,8 @@ import { customerService } from '../api/services';
 export default function CustomersPage({ onError, onSuccess }) {
     const [items, setItems] = useState([]);
     const [form, setForm] = useState({ name: '', email: '', phone: '' });
+    const [editingId, setEditingId] = useState(null);
+    const [editForm, setEditForm] = useState({ name: '', email: '', phone: '' });
 
     const load = async () => {
         try { setItems(await customerService.list()); } catch (e) { onError(e.message); }
@@ -16,6 +18,18 @@ export default function CustomersPage({ onError, onSuccess }) {
     const remove = async (id) => {
         try { await customerService.remove(id); onSuccess('Customer deleted'); load(); } catch (e) { onError(e.message); }
     };
+    const startEdit = (item) => {
+        setEditingId(item.id);
+        setEditForm({ name: item.name, email: item.email, phone: item.phone });
+    };
+    const saveEdit = async (id) => {
+        try {
+            await customerService.update(id, editForm);
+            setEditingId(null);
+            onSuccess('Customer updated');
+            load();
+        } catch (e) { onError(e.message); }
+    };
 
     return <div>
         <div className="card">
@@ -24,7 +38,7 @@ export default function CustomersPage({ onError, onSuccess }) {
             <button onClick={create}>Create</button>
         </div>
         <table className="table"><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Actions</th></tr></thead><tbody>
-        {items.map(c => <tr key={c.id}><td>{c.id}</td><td>{c.name}</td><td>{c.email}</td><td>{c.phone}</td><td><button onClick={()=>remove(c.id)}>Delete</button></td></tr>)}
+        {items.map(c => <tr key={c.id}><td>{c.id}</td><td>{editingId===c.id ? <input value={editForm.name} onChange={(e)=>setEditForm({...editForm,name:e.target.value})}/> : c.name}</td><td>{editingId===c.id ? <input value={editForm.email} onChange={(e)=>setEditForm({...editForm,email:e.target.value})}/> : c.email}</td><td>{editingId===c.id ? <input value={editForm.phone} onChange={(e)=>setEditForm({...editForm,phone:e.target.value})}/> : c.phone}</td><td className="actions">{editingId===c.id ? <button onClick={()=>saveEdit(c.id)}>Save</button> : <button onClick={()=>startEdit(c)}>Edit</button>} <button onClick={()=>remove(c.id)}>Delete</button></td></tr>)}
         </tbody></table>
     </div>;
 }

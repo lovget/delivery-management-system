@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { customerService, orderService, productService } from '../api/services';
 
-const STATUSES = ['NEW', 'PROCESSING', 'DONE'];
+const STATUSES = ['NEW', 'COOKING', 'DELIVERING', 'DONE'];
 
 export default function OrdersPage({ onError, onSuccess }) {
     const [orders, setOrders] = useState([]);

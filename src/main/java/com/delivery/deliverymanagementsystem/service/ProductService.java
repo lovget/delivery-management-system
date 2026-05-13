@@ -35,24 +35,15 @@ public class ProductService {
     }
 
     public Product create(ProductCreateDto dto) {
-
         Product product = new Product();
-        product.setName(dto.getName());
-        product.setPrice(dto.getPrice());
-
-        Set<Category> categories = new HashSet<>();
-
-        if (dto.getCategoryIds() != null) {
-            for (Long id : dto.getCategoryIds()) {
-                Category category = categoryRepository.findById(id)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found: " + id));
-                categories.add(category);
-            }
-        }
-
-        product.setCategories(categories);
-
+        apply(product, dto);
         return productRepository.save(product);
+    }
+
+    public Product update(Long id, ProductCreateDto dto) {
+        Product existing = getById(id);
+        apply(existing, dto);
+        return productRepository.save(existing);
     }
 
     public void delete(Long id) {
@@ -61,5 +52,20 @@ public class ProductService {
         }
 
         productRepository.deleteById(id);
+    }
+
+    private void apply(Product product, ProductCreateDto dto) {
+        product.setName(dto.getName());
+        product.setPrice(dto.getPrice());
+
+        Set<Category> categories = new HashSet<>();
+        if (dto.getCategoryIds() != null) {
+            for (Long id : dto.getCategoryIds()) {
+                Category category = categoryRepository.findById(id)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found: " + id));
+                categories.add(category);
+            }
+        }
+        product.setCategories(categories);
     }
 }

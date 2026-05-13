@@ -39,6 +39,12 @@ public class ProductController {
         return productService.create(dto);
     }
 
+    @PutMapping("/{id}")
+    @Operation(summary = "Обновить товар")
+    public Product update(@PathVariable Long id, @Valid @RequestBody ProductCreateDto dto) {
+        return productService.update(id, dto);
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить товар")
     public void delete(@PathVariable Long id) {

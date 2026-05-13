@@ -1,12 +1,70 @@
-body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
-.app { max-width: 1200px; margin: 0 auto; padding: 16px; }
-nav { display: flex; gap: 8px; margin-bottom: 16px; }
-button { padding: 8px 12px; cursor: pointer; }
-.table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 8px; }
-.table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
-.card { background: #fff; border: 1px solid #ddd; padding: 12px; margin-bottom: 12px; }
-.row { display: flex; gap: 8px; margin-bottom: 8px; }
-.row input, .row select { flex: 1; padding: 8px; }
+:root {
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: #1f2937;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(180deg, #fff8f1 0%, #f9fbff 100%);
+}
+
+.app {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+h1 { margin: 0 0 18px; }
+
+nav { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+button {
+    padding: 8px 14px;
+    cursor: pointer;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+}
+button:hover { background: #f1f5f9; }
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.table th, .table td {
+    border: 1px solid #e5e7eb;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+}
+.table th { background: #f8fafc; }
+
+.card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 14px;
+}
+.row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.row input, .row select, input, select {
+    flex: 1;
+    min-width: 120px;
+    padding: 9px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
 .error { color: #b00020; white-space: pre-wrap; }
 .success { color: #0a7a2f; }
-.badge { display:inline-block; background:#eee; border-radius:12px; padding:2px 8px; margin:2px; }
+.badge {
+    display:inline-block;
+    background:#ecfeff;
+    color:#0f766e;
+    border:1px solid #99f6e4;
+    border-radius:12px;
+    padding:2px 8px;
+    margin:2px;
+}
+.actions { white-space: nowrap; }
