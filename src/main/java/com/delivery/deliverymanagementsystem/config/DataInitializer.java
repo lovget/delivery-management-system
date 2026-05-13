@@ -20,6 +20,22 @@ import java.util.Set;
 @Component
 public class DataInitializer implements CommandLineRunner {
 
+    private static final String CATEGORY_PIZZA = "Пицца";
+    private static final String CATEGORY_SUSHI = "Суши";
+    private static final String CATEGORY_BURGERS = "Бургеры";
+    private static final String CATEGORY_DRINKS = "Напитки";
+    private static final String CATEGORY_DESSERTS = "Десерты";
+
+    private static final String PRODUCT_PEPPERONI = "Пепперони";
+    private static final String PRODUCT_MARGHERITA = "Маргарита";
+    private static final String PRODUCT_DRAGON_ROLL = "Дракон ролл";
+    private static final String PRODUCT_PHILADELPHIA = "Филадельфия";
+    private static final String PRODUCT_DOUBLE_BURGER = "Двойной бургер";
+    private static final String PRODUCT_FRIES = "Картофель фри";
+    private static final String PRODUCT_COLA = "Кола 0.5";
+    private static final String PRODUCT_CHEESECAKE = "Чизкейк";
+    private static final String PRODUCT_CRANBERRY_DRINK = "Морс клюквенный";
+
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
@@ -52,7 +68,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void seedCategories() {
-        List.of("Пицца", "Суши", "Бургеры", "Напитки", "Десерты")
+        List.of(CATEGORY_PIZZA, CATEGORY_SUSHI, CATEGORY_BURGERS, CATEGORY_DRINKS, CATEGORY_DESSERTS)
                 .forEach(name -> {
                     Category category = new Category();
                     category.setName(name);
@@ -62,15 +78,15 @@ public class DataInitializer implements CommandLineRunner {
 
     private void seedProducts() {
         Map<String, Double> data = Map.of(
-                "Пепперони", 22.50,
-                "Маргарита", 19.90,
-                "Дракон ролл", 28.40,
-                "Филадельфия", 31.00,
-                "Двойной бургер", 24.80,
-                "Картофель фри", 8.90,
-                "Кола 0.5", 4.50,
-                "Чизкейк", 11.20,
-                "Морс клюквенный", 5.40
+                PRODUCT_PEPPERONI, 22.50,
+                PRODUCT_MARGHERITA, 19.90,
+                PRODUCT_DRAGON_ROLL, 28.40,
+                PRODUCT_PHILADELPHIA, 31.00,
+                PRODUCT_DOUBLE_BURGER, 24.80,
+                PRODUCT_FRIES, 8.90,
+                PRODUCT_COLA, 4.50,
+                PRODUCT_CHEESECAKE, 11.20,
+                PRODUCT_CRANBERRY_DRINK, 5.40
         );
 
         data.forEach((name, price) -> {
@@ -84,11 +100,11 @@ public class DataInitializer implements CommandLineRunner {
 
     private Set<Category> resolveCategoriesForProduct(String productName) {
         Set<String> names = switch (productName) {
-            case "Пепперони", "Маргарита" -> Set.of("Пицца");
-            case "Дракон ролл", "Филадельфия" -> Set.of("Суши");
-            case "Двойной бургер", "Картофель фри" -> Set.of("Бургеры");
-            case "Кола 0.5", "Морс клюквенный" -> Set.of("Напитки");
-            case "Чизкейк" -> Set.of("Десерты");
+            case PRODUCT_PEPPERONI, PRODUCT_MARGHERITA -> Set.of(CATEGORY_PIZZA);
+            case PRODUCT_DRAGON_ROLL, PRODUCT_PHILADELPHIA -> Set.of(CATEGORY_SUSHI);
+            case PRODUCT_DOUBLE_BURGER, PRODUCT_FRIES -> Set.of(CATEGORY_BURGERS);
+            case PRODUCT_COLA, PRODUCT_CRANBERRY_DRINK -> Set.of(CATEGORY_DRINKS);
+            case PRODUCT_CHEESECAKE -> Set.of(CATEGORY_DESSERTS);
             default -> Set.of();
         };
 
@@ -125,10 +141,10 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
 
-        orderRepository.save(order(customers.get(0), Set.of(findProduct(products, "Пепперони"), findProduct(products, "Кола 0.5")), OrderStatus.NEW));
-        orderRepository.save(order(customers.get(1), Set.of(findProduct(products, "Филадельфия"), findProduct(products, "Морс клюквенный")), OrderStatus.COOKING));
-        orderRepository.save(order(customers.get(2), Set.of(findProduct(products, "Двойной бургер"), findProduct(products, "Картофель фри")), OrderStatus.DELIVERING));
-        orderRepository.save(order(customers.get(3), Set.of(findProduct(products, "Маргарита"), findProduct(products, "Чизкейк")), OrderStatus.DONE));
+        orderRepository.save(order(customers.get(0), Set.of(findProduct(products, PRODUCT_PEPPERONI), findProduct(products, PRODUCT_COLA)), OrderStatus.NEW));
+        orderRepository.save(order(customers.get(1), Set.of(findProduct(products, PRODUCT_PHILADELPHIA), findProduct(products, PRODUCT_CRANBERRY_DRINK)), OrderStatus.COOKING));
+        orderRepository.save(order(customers.get(2), Set.of(findProduct(products, PRODUCT_DOUBLE_BURGER), findProduct(products, PRODUCT_FRIES)), OrderStatus.DELIVERING));
+        orderRepository.save(order(customers.get(3), Set.of(findProduct(products, PRODUCT_MARGHERITA), findProduct(products, PRODUCT_CHEESECAKE)), OrderStatus.DONE));
     }
 
     private Product findProduct(List<Product> products, String name) {
