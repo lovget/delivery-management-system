@@ -201,7 +201,8 @@ public class OrderService {
         double total = products.stream()
                 .mapToDouble(Product::getPrice)
                 .sum();
-        order.setTotalAmount(total);
+        double roundedTotal = Math.round(total * 100.0) / 100.0;
+        order.setTotalAmount(roundedTotal);
 
         return order;
     }

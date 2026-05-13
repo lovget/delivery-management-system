@@ -5,6 +5,13 @@ import OrdersPage from './pages/OrdersPage';
 import CategoriesPage from './pages/CategoriesPage';
 import ErrorBanner from './components/ErrorBanner';
 
+const NAV_ITEMS = [
+    { key: 'orders', label: '📦 Orders' },
+    { key: 'products', label: '🧾 Products' },
+    { key: 'customers', label: '👤 Customers' },
+    { key: 'categories', label: '🏷️ Categories' }
+];
+
 export default function App() {
     const [page, setPage] = useState('orders');
     const [error, setError] = useState('');
@@ -15,11 +22,16 @@ export default function App() {
 
     return <div className="app">
         <h1>Delivery Management Frontend</h1>
-        <nav>
-            <button onClick={() => setPage('orders')}>Orders</button>
-            <button onClick={() => setPage('products')}>Products</button>
-            <button onClick={() => setPage('customers')}>Customers</button>
-            <button onClick={() => setPage('categories')}>Categories</button>
+        <nav className="navbar">
+            {NAV_ITEMS.map((item) => (
+                <button
+                    key={item.key}
+                    className={`nav-btn ${page === item.key ? 'active' : ''}`}
+                    onClick={() => setPage(item.key)}
+                >
+                    {item.label}
+                </button>
+            ))}
         </nav>
         <ErrorBanner error={error} success={success} />
         {page === 'orders' && <OrdersPage onError={onError} onSuccess={onSuccess} />}

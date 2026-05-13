@@ -35,10 +35,10 @@ export default function CustomersPage({ onError, onSuccess }) {
         <div className="card">
             <h3>Create customer</h3>
             <div className="row"><input placeholder="Name" value={form.name} onChange={(e)=>setForm({...form,name:e.target.value})}/><input placeholder="Email" value={form.email} onChange={(e)=>setForm({...form,email:e.target.value})}/><input placeholder="Phone" value={form.phone} onChange={(e)=>setForm({...form,phone:e.target.value})}/></div>
-            <button onClick={create}>Create</button>
+            <button className="btn btn-create" onClick={create}>Create</button>
         </div>
         <table className="table"><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Actions</th></tr></thead><tbody>
-        {items.map(c => <tr key={c.id}><td>{c.id}</td><td>{editingId===c.id ? <input value={editForm.name} onChange={(e)=>setEditForm({...editForm,name:e.target.value})}/> : c.name}</td><td>{editingId===c.id ? <input value={editForm.email} onChange={(e)=>setEditForm({...editForm,email:e.target.value})}/> : c.email}</td><td>{editingId===c.id ? <input value={editForm.phone} onChange={(e)=>setEditForm({...editForm,phone:e.target.value})}/> : c.phone}</td><td className="actions">{editingId===c.id ? <button onClick={()=>saveEdit(c.id)}>Save</button> : <button onClick={()=>startEdit(c)}>Edit</button>} <button onClick={()=>remove(c.id)}>Delete</button></td></tr>)}
+        {items.map(c => <tr key={c.id}><td>{c.id}</td><td>{editingId===c.id ? <input value={editForm.name} onChange={(e)=>setEditForm({...editForm,name:e.target.value})}/> : c.name}</td><td>{editingId===c.id ? <input value={editForm.email} onChange={(e)=>setEditForm({...editForm,email:e.target.value})}/> : c.email}</td><td>{editingId===c.id ? <input value={editForm.phone} onChange={(e)=>setEditForm({...editForm,phone:e.target.value})}/> : c.phone}</td><td className="actions">{editingId===c.id ? <button className="btn btn-edit" onClick={()=>saveEdit(c.id)}>Save</button> : <button className="btn btn-edit" onClick={()=>startEdit(c)}>Edit</button>} <button className="btn btn-delete" onClick={()=>remove(c.id)}>Delete</button></td></tr>)}
         </tbody></table>
     </div>;
 }

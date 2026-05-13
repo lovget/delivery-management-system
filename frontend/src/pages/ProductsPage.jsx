@@ -42,10 +42,10 @@ export default function ProductsPage({ onError, onSuccess }) {
             <select multiple value={form.categoryIds} onChange={(e)=>setForm({...form,categoryIds:[...e.target.selectedOptions].map(o=>Number(o.value))})}>
                 {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
-            <button onClick={create}>Create</button>
+            <button className="btn btn-create" onClick={create}>Create</button>
         </div>
         <table className="table"><thead><tr><th>ID</th><th>Name</th><th>Price</th><th>Categories</th><th>Actions</th></tr></thead><tbody>
-        {items.map(p => <tr key={p.id}><td>{p.id}</td><td>{editingId===p.id ? <input value={editForm.name} onChange={(e)=>setEditForm({...editForm,name:e.target.value})}/> : p.name}</td><td>{editingId===p.id ? <input type="number" value={editForm.price} onChange={(e)=>setEditForm({...editForm,price:e.target.value})}/> : p.price}</td><td>{editingId===p.id ? <select multiple value={editForm.categoryIds} onChange={(e)=>setEditForm({...editForm,categoryIds:[...e.target.selectedOptions].map(o=>Number(o.value))})}>{categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select> : (p.categories||[]).map(c=><span className="badge" key={c.id}>{c.name}</span>)}</td><td className="actions">{editingId===p.id ? <button onClick={()=>saveEdit(p.id)}>Save</button> : <button onClick={()=>startEdit(p)}>Edit</button>} <button onClick={()=>remove(p.id)}>Delete</button></td></tr>)}
+        {items.map(p => <tr key={p.id}><td>{p.id}</td><td>{editingId===p.id ? <input value={editForm.name} onChange={(e)=>setEditForm({...editForm,name:e.target.value})}/> : p.name}</td><td>{editingId===p.id ? <input type="number" value={editForm.price} onChange={(e)=>setEditForm({...editForm,price:e.target.value})}/> : p.price}</td><td>{editingId===p.id ? <select multiple value={editForm.categoryIds} onChange={(e)=>setEditForm({...editForm,categoryIds:[...e.target.selectedOptions].map(o=>Number(o.value))})}>{categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select> : (p.categories||[]).map(c=><span className="badge category" key={c.id}>{c.name}</span>)}</td><td className="actions">{editingId===p.id ? <button className="btn btn-edit" onClick={()=>saveEdit(p.id)}>Save</button> : <button className="btn btn-edit" onClick={()=>startEdit(p)}>Edit</button>} <button className="btn btn-delete" onClick={()=>remove(p.id)}>Delete</button></td></tr>)}
         </tbody></table>
     </div>;
 }
