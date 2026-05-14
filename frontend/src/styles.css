@@ -58,3 +58,35 @@ input:focus, select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 
 .option-item { width: 100%; display: flex; justify-content: space-between; border: 1px solid #e5e7eb; margin-bottom: 6px; background: #fff; }
 .option-item:hover { background: #f8fafc; }
 .hint { color: #94a3b8; font-size: 13px; }
+
+.table-wrap { width: 100%; overflow-x: auto; }
+.table { table-layout: fixed; }
+.table th, .table td { padding: 12px 14px; min-height: 52px; }
+.table tbody tr { transition: background-color .18s ease; }
+.table tbody tr:hover { background: #f4f8ff; }
+.table td { color: #1f2937; }
+.table .actions-col,
+.table .actions-cell { text-align: right; }
+.actions-cell { width: 1%; white-space: nowrap; }
+.actions { display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
+.actions .btn { min-width: 84px; min-height: 34px; padding: 6px 10px; border-radius: 8px; }
+
+.table-categories .name-col { width: auto; }
+.table-categories .actions-col { width: 180px; }
+
+.table-customers .name-col { width: 24%; }
+.table-customers .email-col { width: 33%; }
+.table-customers .phone-col { width: 23%; }
+.table-customers .actions-col { width: 20%; }
+
+.table-products .name-col { width: 30%; }
+.table-products .price-col { width: 16%; }
+.table-products .categories-col { width: 34%; }
+.table-products .actions-col { width: 20%; }
+
+.table-orders .status-col { width: 14%; }
+.table-orders .total-col { width: 13%; }
+.table-orders .customer-col { width: 18%; }
+.table-orders .products-col { width: 26%; }
+.table-orders .update-col { width: 17%; }
+.table-orders .actions-col { width: 12%; }
