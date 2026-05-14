@@ -25,7 +25,6 @@ button, .btn {
 button:hover, .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0, 0, 0, .08); }
 
 .btn-create { background: #16a34a; border-color: #15803d; color: #fff; }
-.btn-create.standalone { margin-top: 12px; }
 .btn-delete { background: #dc2626; border-color: #b91c1c; color: #fff; }
 .btn-edit { background: #2563eb; border-color: #1d4ed8; color: #fff; }
 .btn-filter { background: #111827; border-color: #111827; color: #fff; }
@@ -64,9 +63,33 @@ button:hover, .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px r
     background: #fff;
 }
 
-.multi-select { min-height: 130px; }
-.checkbox-cell { width: 44px; text-align: center !important; }
-.checkbox-cell input { width: 16px; height: 16px; }
+.create-wrap {
+    margin-top: 16px;
+    padding-top: 8px;
+}
+
+.minimal-list {
+    display: grid;
+    gap: 8px;
+    max-height: 180px;
+    overflow: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px;
+    background: #fff;
+}
+
+.minimal-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.minimal-item input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+}
 
 .filters-bar { display: flex; gap: 10px; margin: 14px 0; flex-wrap: wrap; align-items: center; }
 .filters-bar .search { min-width: 240px; flex: 2; }
