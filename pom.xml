@@ -20,7 +20,7 @@
     </parent>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <sonar.projectKey>lovget_delivery-management-system</sonar.projectKey>
         <sonar.organization>lovget</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
