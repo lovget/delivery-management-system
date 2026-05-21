@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: dms-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: DB_URL
+        fromDatabase:
+          name: dms-postgres
+          property: connectionString
+      - key: DB_USERNAME
+        fromDatabase:
+          name: dms-postgres
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: dms-postgres
+          property: password
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+  - type: web
+    name: dms-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerBuildArgs:
+      - VITE_API_BASE_URL=https://dms-backend.onrender.com
+    plan: free
+
+databases:
+  - name: dms-postgres
+    plan: free
+    databaseName: delivery_db
+    user: delivery_user
