@@ -19,12 +19,11 @@ services:
           property: password
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
         value: update
+
   - type: web
     name: dms-frontend
     runtime: docker
     dockerfilePath: ./frontend/Dockerfile
-    dockerBuildArgs:
-      - VITE_API_BASE_URL=https://dms-backend.onrender.com
     plan: free
 
 databases:
