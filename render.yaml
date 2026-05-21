@@ -5,10 +5,20 @@ services:
     dockerfilePath: ./Dockerfile
     plan: free
     envVars:
-      - key: DB_URL
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      - key: DB_HOST
         fromDatabase:
           name: dms-postgres
-          property: connectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: dms-postgres
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: dms-postgres
+          property: database
       - key: DB_USERNAME
         fromDatabase:
           name: dms-postgres
