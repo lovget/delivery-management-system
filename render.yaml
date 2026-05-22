@@ -29,6 +29,8 @@ services:
           property: password
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
         value: update
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://dms-frontend-ycxi.onrender.com
 
   - type: web
     name: dms-frontend
