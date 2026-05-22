@@ -1,6 +1,5 @@
 package com.delivery.deliverymanagementsystem.controller;
 
-import com.delivery.deliverymanagementsystem.dto.CategoryDto;
 import com.delivery.deliverymanagementsystem.entity.Category;
 import com.delivery.deliverymanagementsystem.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,9 +22,7 @@ public class CategoryController {
 
     @PostMapping
     @Operation(summary = "Создать категорию")
-    public Category create(@Valid @RequestBody CategoryDto dto) {
-        Category category = new Category();
-        category.setName(dto.getName());
+    public Category create(@Valid @RequestBody Category category) {
         return categoryService.create(category);
     }
 
@@ -43,9 +40,7 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Обновить категорию")
-    public Category update(@PathVariable Long id, @Valid @RequestBody CategoryDto dto) {
-        Category category = new Category();
-        category.setName(dto.getName());
+    public Category update(@PathVariable Long id, @Valid @RequestBody Category category) {
         return categoryService.update(id, category);
     }
 
