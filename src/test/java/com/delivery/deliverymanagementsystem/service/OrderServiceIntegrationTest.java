@@ -67,9 +67,10 @@ class OrderServiceIntegrationTest {
         second.setProductIds(List.of(999_999L));
 
         long before = orderRepository.count();
+        List<OrderCreateDto> orders = List.of(first, second);
 
         assertThrows(ResponseStatusException.class,
-                () -> orderService.createOrdersBulkTransactional(List.of(first, second)));
+                () -> orderService.createOrdersBulkTransactional(orders));
 
         assertEquals(before, orderRepository.count());
     }
@@ -85,9 +86,10 @@ class OrderServiceIntegrationTest {
         second.setProductIds(List.of(999_999L));
 
         long before = orderRepository.count();
+        List<OrderCreateDto> orders = List.of(first, second);
 
         assertThrows(ResponseStatusException.class,
-                () -> orderService.createOrdersBulkNonTransactional(List.of(first, second)));
+                () -> orderService.createOrdersBulkNonTransactional(orders));
 
         assertEquals(before + 1, orderRepository.count());
         Order savedOrder = orderRepository.findAll().get(0);

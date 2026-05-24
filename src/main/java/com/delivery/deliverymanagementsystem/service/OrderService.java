@@ -147,7 +147,7 @@ public class OrderService {
         List<Order> savedOrders = safeDtos.stream()
                 .map(this::buildOrder)
                 .map(orderRepository::save)
-                .collect(Collectors.toList());
+                .toList();
 
         cache.clear();
         return savedOrders;

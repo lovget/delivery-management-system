@@ -204,8 +204,10 @@ class OrderServiceTest {
         when(productRepository.findById(999L)).thenReturn(Optional.empty());
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
+        List<OrderCreateDto> orders = List.of(firstDto, secondDto);
+
         assertThrows(ResponseStatusException.class,
-                () -> orderService.createOrdersBulkNonTransactional(List.of(firstDto, secondDto)));
+                () -> orderService.createOrdersBulkNonTransactional(orders));
 
         verify(orderRepository, times(1)).save(any(Order.class));
     }
