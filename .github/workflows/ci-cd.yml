@@ -39,7 +39,9 @@ jobs:
           cache: maven
 
       - name: Build backend jar
-        run: ./mvnw -B -DskipTests clean package
+        run: |
+          chmod +x ./mvnw
+          ./mvnw -B -DskipTests clean package
 
       - name: Build backend Docker image
         run: docker build -t dms-backend:test .
@@ -59,7 +61,9 @@ jobs:
           cache: maven
 
       - name: Run backend tests
-        run: ./mvnw -B test
+        run: |
+          chmod +x ./mvnw
+          ./mvnw -B test
 
   deploy:
     runs-on: ubuntu-latest
