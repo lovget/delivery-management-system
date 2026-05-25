@@ -3,6 +3,7 @@ package com.delivery.deliverymanagementsystem.service;
 import com.delivery.deliverymanagementsystem.dto.OrderCreateDto;
 import com.delivery.deliverymanagementsystem.entity.Customer;
 import com.delivery.deliverymanagementsystem.entity.Order;
+import com.delivery.deliverymanagementsystem.entity.OrderStatus;
 import com.delivery.deliverymanagementsystem.entity.Product;
 import com.delivery.deliverymanagementsystem.repository.CustomerRepository;
 import com.delivery.deliverymanagementsystem.repository.OrderRepository;
@@ -94,5 +95,38 @@ class OrderServiceIntegrationTest {
         assertEquals(before + 1, orderRepository.count());
         Order savedOrder = orderRepository.findAll().get(0);
         assertEquals(99.0, savedOrder.getTotalAmount());
+    }
+
+    @Test
+    void orders_shouldStaySortedByNewestCreatedAtAcrossListPageFilterAndStatusUpdate()
+            throws InterruptedException {
+        OrderCreateDto firstDto = validOrderDto();
+        OrderCreateDto secondDto = validOrderDto();
+
+        Order first = orderService.createOrder(firstDto);
+        Thread.sleep(10);
+        Order second = orderService.createOrder(secondDto);
+
+        List<Order> all = orderService.getAll();
+        List<Order> filtered = orderService.getFiltered(OrderStatus.NEW, 0.0);
+
+        assertEquals(second.getId(), all.get(0).getId());
+        assertEquals(first.getId(), all.get(1).getId());
+        assertEquals(second.getId(), orderService.getPaged(0, 2).getContent().get(0).getId());
+        assertEquals(first.getId(), orderService.getPaged(0, 2).getContent().get(1).getId());
+        assertEquals(second.getId(), filtered.get(0).getId());
+        assertEquals(first.getId(), filtered.get(1).getId());
+
+        orderService.updateStatus(second.getId(), OrderStatus.PROCESSING);
+
+        assertEquals(second.getId(), orderService.getAll().get(0).getId());
+    }
+
+    private OrderCreateDto validOrderDto() {
+        OrderCreateDto dto = new OrderCreateDto();
+        dto.setCustomerId(customerId);
+        dto.setProductIds(List.of(validProductId));
+        dto.setStatus(OrderStatus.NEW);
+        return dto;
     }
 }
