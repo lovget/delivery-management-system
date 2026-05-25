@@ -14,11 +14,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,6 +37,10 @@ public class OrderService {
 
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
     private static final String FROM_CACHE_LOG = "FROM CACHE";
+    private static final Sort ORDER_QUEUE_SORT = Sort.by(
+            Sort.Order.desc("createdAt").nullsLast(),
+            Sort.Order.desc("id")
+    );
 
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
@@ -50,7 +57,7 @@ public class OrderService {
     }
 
     public List<Order> getAll() {
-        return orderRepository.findAll();
+        return orderRepository.findAll(ORDER_QUEUE_SORT);
     }
 
     public Order getById(Long id) {
@@ -119,7 +126,7 @@ public class OrderService {
     }
 
     public Page<Order> getPaged(int page, int size) {
-        return orderRepository.findAll(PageRequest.of(page, size));
+        return orderRepository.findAll(PageRequest.of(page, size, ORDER_QUEUE_SORT));
     }
 
     @Transactional
@@ -220,46 +227,57 @@ public class OrderService {
                 order.setId(orderId);
                 order.setStatus(OrderStatus.valueOf((String) row[1]));
                 order.setTotalAmount(((Number) row[2]).doubleValue());
+                order.setCreatedAt(toLocalDateTime(row[3]));
                 order.setProducts(new HashSet<>());
 
                 Customer customer = new Customer();
-                customer.setId(((Number) row[3]).longValue());
-                customer.setName((String) row[4]);
-                customer.setEmail((String) row[5]);
-                customer.setPhone((String) row[6]);
+                customer.setId(((Number) row[4]).longValue());
+                customer.setName((String) row[5]);
+                customer.setEmail((String) row[6]);
+                customer.setPhone((String) row[7]);
                 order.setCustomer(customer);
 
                 orders.put(orderId, order);
             }
 
-            Long productId = ((Number) row[7]).longValue();
+            Long productId = ((Number) row[8]).longValue();
             Map<Long, Product> products = orderProducts.computeIfAbsent(orderId, id -> new LinkedHashMap<>());
             Product product = products.get(productId);
 
             if (product == null) {
                 product = new Product();
                 product.setId(productId);
-                product.setName((String) row[8]);
-                product.setPrice(((Number) row[9]).doubleValue());
+                product.setName((String) row[9]);
+                product.setPrice(((Number) row[10]).doubleValue());
                 product.setCategories(new HashSet<>());
                 products.put(productId, product);
                 order.getProducts().add(product);
             }
 
-            if (row[10] != null) {
-                Long categoryId = ((Number) row[10]).longValue();
+            if (row[11] != null) {
+                Long categoryId = ((Number) row[11]).longValue();
                 boolean exists = product.getCategories().stream()
                         .anyMatch(category -> category.getId().equals(categoryId));
 
                 if (!exists) {
                     Category category = new Category();
                     category.setId(categoryId);
-                    category.setName((String) row[11]);
+                    category.setName((String) row[12]);
                     product.getCategories().add(category);
                 }
             }
         }
 
         return new ArrayList<>(orders.values());
+    }
+
+    private LocalDateTime toLocalDateTime(Object value) {
+        if (value instanceof Timestamp timestamp) {
+            return timestamp.toLocalDateTime();
+        }
+        if (value instanceof LocalDateTime localDateTime) {
+            return localDateTime;
+        }
+        return null;
     }
 }

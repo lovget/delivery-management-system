@@ -4,6 +4,7 @@ import com.delivery.deliverymanagementsystem.entity.Order;
 import com.delivery.deliverymanagementsystem.entity.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,17 +16,18 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Override
     @EntityGraph(attributePaths = {"customer", "products", "products.categories"})
-    List<Order> findAll();
+    List<Order> findAll(Sort sort);
 
     @Query("SELECT DISTINCT o FROM Order o " +
             "JOIN FETCH o.customer c " +
             "JOIN FETCH o.products p " +
             "LEFT JOIN FETCH p.categories " +
-            "WHERE o.status = :status AND o.totalAmount > :amount")
+            "WHERE o.status = :status AND o.totalAmount > :amount " +
+            "ORDER BY o.createdAt DESC, o.id DESC")
     List<Order> findByStatusAndAmount(@Param("status") OrderStatus status,
                                       @Param("amount") double amount);
 
-    @Query(value = "SELECT o.id, o.status, o.total_amount, " +
+    @Query(value = "SELECT o.id, o.status, o.total_amount, o.created_at, " +
             "c.id, c.name, c.email, c.phone, " +
             "p.id, p.name, p.price, " +
             "ca.id, ca.name " +
@@ -35,7 +37,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "JOIN products p ON p.id = op.product_id " +
             "LEFT JOIN product_categories pc ON pc.product_id = p.id " +
             "LEFT JOIN categories ca ON ca.id = pc.category_id " +
-            "WHERE o.status = :status AND o.total_amount > :amount", nativeQuery = true)
+            "WHERE o.status = :status AND o.total_amount > :amount " +
+            "ORDER BY o.created_at DESC NULLS LAST, o.id DESC", nativeQuery = true)
     List<Object[]> findByStatusAndAmountNativeRaw(@Param("status") String status,
                                                   @Param("amount") double amount);
 
@@ -43,11 +46,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "JOIN FETCH o.customer c " +
             "JOIN FETCH o.products p " +
             "LEFT JOIN FETCH p.categories " +
-            "WHERE c.name = :name AND o.totalAmount > :amount")
+            "WHERE c.name = :name AND o.totalAmount > :amount " +
+            "ORDER BY o.createdAt DESC, o.id DESC")
     List<Order> findByCustomerNameAndAmount(@Param("name") String name,
                                             @Param("amount") double amount);
 
-    @Query(value = "SELECT o.id, o.status, o.total_amount, " +
+    @Query(value = "SELECT o.id, o.status, o.total_amount, o.created_at, " +
             "c.id, c.name, c.email, c.phone, " +
             "p.id, p.name, p.price, " +
             "ca.id, ca.name " +
@@ -57,7 +61,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "JOIN products p ON p.id = op.product_id " +
             "LEFT JOIN product_categories pc ON pc.product_id = p.id " +
             "LEFT JOIN categories ca ON ca.id = pc.category_id " +
-            "WHERE c.name = :name AND o.total_amount > :amount",
+            "WHERE c.name = :name AND o.total_amount > :amount " +
+            "ORDER BY o.created_at DESC NULLS LAST, o.id DESC",
             nativeQuery = true)
     List<Object[]> findByCustomerNameAndAmountNativeRaw(@Param("name") String name,
                                                         @Param("amount") double amount);

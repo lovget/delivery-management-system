@@ -18,9 +18,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +38,11 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
+
+    private static final Sort ORDER_QUEUE_SORT = Sort.by(
+            Sort.Order.desc("createdAt").nullsLast(),
+            Sort.Order.desc("id")
+    );
 
     @Mock
     private OrderRepository orderRepository;
@@ -73,7 +80,7 @@ class OrderServiceTest {
     @Test
     void getAll_returnsRepositoryResult() {
         List<Order> orders = List.of(new Order(), new Order());
-        when(orderRepository.findAll()).thenReturn(orders);
+        when(orderRepository.findAll(ORDER_QUEUE_SORT)).thenReturn(orders);
 
         assertSame(orders, orderService.getAll());
     }
@@ -110,10 +117,11 @@ class OrderServiceTest {
 
     @Test
     void getFilteredNative_mapsRowsAndUsesCache() {
+        LocalDateTime now = LocalDateTime.now();
         List<Object[]> rows = List.of(
-                new Object[]{1L, "NEW", 150.0, 2L, "Bob", "bob@mail.com", "456", 10L, "Burger", 100.0, 1000L, "FastFood"},
-                new Object[]{1L, "NEW", 150.0, 2L, "Bob", "bob@mail.com", "456", 20L, "Fries", 50.0, null, null},
-                new Object[]{1L, "NEW", 150.0, 2L, "Bob", "bob@mail.com", "456", 10L, "Burger", 100.0, 1000L, "FastFood"}
+                new Object[]{1L, "NEW", 150.0, now, 2L, "Bob", "bob@mail.com", "456", 10L, "Burger", 100.0, 1000L, "FastFood"},
+                new Object[]{1L, "NEW", 150.0, now, 2L, "Bob", "bob@mail.com", "456", 20L, "Fries", 50.0, null, null},
+                new Object[]{1L, "NEW", 150.0, now, 2L, "Bob", "bob@mail.com", "456", 10L, "Burger", 100.0, 1000L, "FastFood"}
         );
         when(orderRepository.findByStatusAndAmountNativeRaw("NEW", 100.0)).thenReturn(rows);
 
@@ -123,6 +131,7 @@ class OrderServiceTest {
         assertEquals(1, result.size());
         Order mapped = result.get(0);
         assertEquals(1L, mapped.getId());
+        assertEquals(now, mapped.getCreatedAt());
         assertEquals(2, mapped.getProducts().size());
 
         Product burger = mapped.getProducts().stream().filter(p -> p.getId().equals(10L)).findFirst().orElseThrow();
@@ -147,7 +156,10 @@ class OrderServiceTest {
 
     @Test
     void getByCustomerNameNative_mapsRowsAndCaches() {
-        Object[] row = new Object[]{2L, "PROCESSING", 50.0, 1L, "Alice", "alice@mail.com", "123", 20L, "Fries", 50.0, null, null};
+        Object[] row = new Object[]{
+                2L, "PROCESSING", 50.0, LocalDateTime.now(), 1L, "Alice", "alice@mail.com", "123",
+                20L, "Fries", 50.0, null, null
+        };
         List<Object[]> rows = java.util.Collections.singletonList(row);
         when(orderRepository.findByCustomerNameAndAmountNativeRaw("Alice", 40.0)).thenReturn(rows);
 
@@ -162,7 +174,7 @@ class OrderServiceTest {
     @Test
     void getPaged_delegatesToRepository() {
         Page<Order> page = new PageImpl<>(List.of(new Order()));
-        when(orderRepository.findAll(PageRequest.of(1, 5))).thenReturn(page);
+        when(orderRepository.findAll(PageRequest.of(1, 5, ORDER_QUEUE_SORT))).thenReturn(page);
 
         Page<Order> result = orderService.getPaged(1, 5);
 
