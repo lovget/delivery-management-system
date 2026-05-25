@@ -40,8 +40,8 @@ import static org.mockito.Mockito.when;
 class OrderServiceTest {
 
     private static final Sort ORDER_QUEUE_SORT = Sort.by(
-            Sort.Order.asc("createdAt").nullsFirst(),
-            Sort.Order.asc("id")
+            Sort.Order.desc("createdAt").nullsLast(),
+            Sort.Order.desc("id")
     );
 
     @Mock
