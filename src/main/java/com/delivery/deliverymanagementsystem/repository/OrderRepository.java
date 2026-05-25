@@ -23,7 +23,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "JOIN FETCH o.products p " +
             "LEFT JOIN FETCH p.categories " +
             "WHERE o.status = :status AND o.totalAmount > :amount " +
-            "ORDER BY o.createdAt DESC, o.id DESC")
+            "ORDER BY o.createdAt ASC NULLS FIRST, o.id ASC")
     List<Order> findByStatusAndAmount(@Param("status") OrderStatus status,
                                       @Param("amount") double amount);
 
@@ -38,7 +38,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "LEFT JOIN product_categories pc ON pc.product_id = p.id " +
             "LEFT JOIN categories ca ON ca.id = pc.category_id " +
             "WHERE o.status = :status AND o.total_amount > :amount " +
-            "ORDER BY o.created_at DESC NULLS LAST, o.id DESC", nativeQuery = true)
+            "ORDER BY o.created_at ASC NULLS FIRST, o.id ASC", nativeQuery = true)
     List<Object[]> findByStatusAndAmountNativeRaw(@Param("status") String status,
                                                   @Param("amount") double amount);
 
@@ -47,7 +47,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "JOIN FETCH o.products p " +
             "LEFT JOIN FETCH p.categories " +
             "WHERE c.name = :name AND o.totalAmount > :amount " +
-            "ORDER BY o.createdAt DESC, o.id DESC")
+            "ORDER BY o.createdAt ASC NULLS FIRST, o.id ASC")
     List<Order> findByCustomerNameAndAmount(@Param("name") String name,
                                             @Param("amount") double amount);
 
@@ -62,7 +62,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "LEFT JOIN product_categories pc ON pc.product_id = p.id " +
             "LEFT JOIN categories ca ON ca.id = pc.category_id " +
             "WHERE c.name = :name AND o.total_amount > :amount " +
-            "ORDER BY o.created_at DESC NULLS LAST, o.id DESC",
+            "ORDER BY o.created_at ASC NULLS FIRST, o.id ASC",
             nativeQuery = true)
     List<Object[]> findByCustomerNameAndAmountNativeRaw(@Param("name") String name,
                                                         @Param("amount") double amount);

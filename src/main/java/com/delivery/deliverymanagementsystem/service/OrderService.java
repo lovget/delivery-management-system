@@ -38,8 +38,8 @@ public class OrderService {
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
     private static final String FROM_CACHE_LOG = "FROM CACHE";
     private static final Sort ORDER_QUEUE_SORT = Sort.by(
-            Sort.Order.desc("createdAt").nullsLast(),
-            Sort.Order.desc("id")
+            Sort.Order.asc("createdAt").nullsFirst(),
+            Sort.Order.asc("id")
     );
 
     private final OrderRepository orderRepository;
